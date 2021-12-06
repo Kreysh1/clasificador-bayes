@@ -7,6 +7,8 @@ namespace Clasificador_Bayes_Ingenuo
     class Leer_Archivos
     {
       public string[,] TablaValores;
+        public int Column;
+        public int Rows;
 
         private void DeterminarDimensiones(string DirArchivo)
         {
@@ -26,6 +28,8 @@ namespace Clasificador_Bayes_Ingenuo
 
             //Se crea la tabla
             TablaValores = new string[Fila, Columnas];
+            this.Column = Columnas;
+            this.Rows = Fila;
 
             System.Windows.Forms.MessageBox.Show(Fila + " | " + Columnas + " \n " + TablaValores.GetUpperBound(0) + " | " + TablaValores.GetUpperBound(1));
             Reader.Close();
