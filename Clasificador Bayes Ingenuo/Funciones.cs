@@ -4,37 +4,48 @@ using System.IO;
 
 namespace Clasificador_Bayes_Ingenuo
 {
-    class Leer_Archivos
+    public static class Archivo
     {
-      public string[,] TablaValores;
-        public int Column;
-        public int Rows;
+        public static string[,] TablaValores;
+        public static int Column;
+        public static int Rows;
+        public static string DirActual = "";
+       
 
-        private void DeterminarDimensiones(string DirArchivo)
+        private static void DeterminarDimensiones(string DirArchivo)
         {
-            StreamReader Reader = new StreamReader(File.OpenRead(DirArchivo));
+            try
+            {
+                StreamReader Reader = new StreamReader(File.OpenRead(DirArchivo));
 
-            //Tabla hecha de listas
-            //Varaibles para determinar el tamano del arreglo
-            int Fila, Columnas;
+                //Tabla hecha de listas
+                //Varaibles para determinar el tamano del arreglo
+                int Fila, Columnas;
 
-            //Se leen y cuenta las cantidades de lineas en el archivo
-            Fila = File.ReadAllLines(DirArchivo).Length;
-            //Se lee la primera fila para determinar la cantidad de columnas
-            string Linea = Reader.ReadLine();
-            string[] values = Linea.Split(',');
-            Columnas = values.Length;
-      
+                //Se leen y cuenta las cantidades de lineas en el archivo
+                Fila = File.ReadAllLines(DirArchivo).Length;
+                //Se lee la primera fila para determinar la cantidad de columnas
+                string Linea = Reader.ReadLine();
+                string[] values = Linea.Split(',');
+                Columnas = values.Length;
 
-            //Se crea la tabla
-            TablaValores = new string[Fila, Columnas];
-            this.Column = Columnas;
-            this.Rows = Fila;
 
-            System.Windows.Forms.MessageBox.Show(Fila + " | " + Columnas + " \n " + TablaValores.GetUpperBound(0) + " | " + TablaValores.GetUpperBound(1));
-            Reader.Close();
+                //Se crea la tabla
+                TablaValores = new string[Fila, Columnas];
+                Column = Columnas;
+                Rows = Fila;
+
+                System.Windows.Forms.MessageBox.Show(Fila + " | " + Columnas + " \n " + TablaValores.GetUpperBound(0) + " | " + TablaValores.GetUpperBound(1));
+                Reader.Close();
+            }
+            catch (Exception e)
+            {
+               
+                throw;
+            }
+            
         }
-        public void LeerArchivo(string DirArchivo)
+        public static void LeerArchivo(string DirArchivo)
         {
             //Se dimensiona el array para guardar los datos
             DeterminarDimensiones(DirArchivo);
