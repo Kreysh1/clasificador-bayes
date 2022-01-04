@@ -47,7 +47,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.label5 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txt_clase = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -240,13 +240,13 @@ namespace Clasificador_Bayes_Ingenuo
             this.button2.Text = "Análisis";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // textBox4
+            // txt_clase
             // 
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(201, 123);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(60, 22);
-            this.textBox4.TabIndex = 11;
+            this.txt_clase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_clase.Location = new System.Drawing.Point(150, 126);
+            this.txt_clase.Name = "txt_clase";
+            this.txt_clase.Size = new System.Drawing.Size(60, 22);
+            this.txt_clase.TabIndex = 11;
             // 
             // label6
             // 
@@ -264,7 +264,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tomato;
             this.ClientSize = new System.Drawing.Size(604, 543);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.txt_clase);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox3);
@@ -308,7 +308,7 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txt_clase;
         private System.Windows.Forms.Label label6;
     }
 }

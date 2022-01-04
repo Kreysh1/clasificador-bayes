@@ -44,29 +44,36 @@ namespace Clasificador_Bayes_Ingenuo
                 open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*"; ;
 
 
-                //Si el recuadro no esta vacio se abre con la direccion puesta
-                if (txt_dataset.Text != "")
+                if (txt_clase.Text != "")
                 {
-
-                    Archivo.LeerArchivo(txt_dataset.Text);
-
-                    Form2 settingsForm = new Form2();
-                    settingsForm.Show();
-                }
-                else
-                {
-                    //Si el recuadro se abre se abre el la interfaz para
-                    if (open.ShowDialog() == DialogResult.OK)
+                    //Si el recuadro no esta vacio se abre con la direccion puesta
+                    if (txt_dataset.Text != "")
                     {
-                        Archivo.LeerArchivo(open.FileName);
+
+                        Archivo.LeerArchivo(txt_dataset.Text);
+
                         Form2 settingsForm = new Form2();
                         settingsForm.Show();
                     }
                     else
                     {
-                        MessageBox.Show("No se selecciono un archivo");
-                    }
+                        //Si el recuadro se abre se abre el la interfaz para
+                        if (open.ShowDialog() == DialogResult.OK)
+                        {
+                            Archivo.LeerArchivo(open.FileName);
+                            Form2 settingsForm = new Form2();
+                            settingsForm.Show();
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se selecciono un archivo");
+                        }
 
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Indique la columna de clase");
                 }
 
             }

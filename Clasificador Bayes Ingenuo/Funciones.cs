@@ -10,9 +10,10 @@ namespace Clasificador_Bayes_Ingenuo
         public static int Column;
         public static int Rows;
         public static string DirActual = "";
+        public static int ClaseIndex;
        
 
-        private static void DeterminarDimensiones(string DirArchivo)
+        private static void DeterminarDimensiones(string DirArchivo, int Clase)
         {
             try
             {
@@ -34,6 +35,7 @@ namespace Clasificador_Bayes_Ingenuo
                 TablaValores = new string[Fila, Columnas];
                 Column = Columnas;
                 Rows = Fila;
+                ClaseIndex = Clase;
 
                 System.Windows.Forms.MessageBox.Show(Fila + " | " + Columnas + " \n " + TablaValores.GetUpperBound(0) + " | " + TablaValores.GetUpperBound(1));
                 Reader.Close();
