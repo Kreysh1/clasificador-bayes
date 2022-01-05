@@ -5,15 +5,17 @@ using System.Windows.Forms;
 
 namespace Clasificador_Bayes_Ingenuo
 {
+    
     public class Archivo
     {
-        private class InfoColumna
+        public class InfoColumna
         {
             public struct DatosCategoria
             {
                 public int TotalEncontrado;
                 public string Nombre;
             }
+            public bool EsClase=false; 
             public int Indice = 1;
             public string NombreColumna;
             public bool EsNumero = false;
@@ -77,7 +79,7 @@ namespace Clasificador_Bayes_Ingenuo
                         //Limpiar el auxiliar
                         AuxiliarCategoria = new DatosCategoria();
                     }
-                    string Aux;
+                    
                      foreach(var val in Categoria)
                     {
                         MessageBox.Show(val.Nombre + " | " + val.TotalEncontrado);
@@ -107,8 +109,65 @@ namespace Clasificador_Bayes_Ingenuo
        
 
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
-         InfoColumna[] DatosColumna;
+        public InfoColumna[] DatosColumna;
+        public double SuavisadoLaplacae(int ColumnaClase)
+        {
 
+            string[,] Aux = { 
+                            {"negro","si","peque~no","alta","+"},
+                            {"amarillo","no","grande","media","-"},
+                            {"amarillo","no","grande","baja","-"},
+                            {"blanco","si","medio","alta","+"},
+                            {"negro","no","medio","alta","-"},
+                            {"rojo","si","peque~no","alta","+"},
+                            {"rojo","si","peque~no","baja","-"},
+                            {"negro","no","medio","media","-"},
+                            {"negro","si","peque~no","media","-"},
+                            {"amarillo","si","grande","media","-"}
+            };
+            TablaValores = Aux;
+            DatosColumna = new InfoColumna[TablaValores.GetLength(1)];
+            string[] Cadena = { "color", "alas", "tamañno", "velocidad ", "lepisto" };
+            for (int i = 0; i<=TablaValores.GetUpperBound(1);i++)
+            {
+                DatosColumna[i] = new InfoColumna();
+                DatosColumna[i].Indice = i;
+                DatosColumna[i].NombreColumna = Cadena[i];
+                if(i == (ColumnaClase))
+                {
+                    DatosColumna[i].EsClase = true;
+                }
+            }
+            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
+            {
+                DatosColumna[i].Correr(TablaValores, i);
+              
+            }
+            //p(+) = 3 / 10
+            //p(Amarillo | +) = (0 + 1) / (3 + 4)
+            //p(no | +) = (0 + 1) / (3 + 2)
+            //p(pequeño | +) = (2 + 1) / (3 + 3)
+            //p(alta | +) = (3 + 1) / (3 + 3)
+
+            //p(-) = 7 / 10
+            //P(Amarillo | -) = (3 + 1) / (7 + 4)
+            //p(no | -) = (4 + 1) / (7 + 2)
+            //p(pequeño | -) = (2 + 1) / (7 + 3)
+            //p(alta | -) = (1 + 1) / (7 + 3)
+            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) Palta | +) = 0
+            //3 / 10 * (0 + 1) / (3 + 4) * (0 + 1) / (3 + 2) * (2 + 1) / (3 + 3) * (3 + 1) / (3 + 3) = 0.00285714
+
+
+            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) Palta | +) = 0
+            //< 3 / 10 * (0 + 1) / (3 + 4) * (0 + 1) / (3 + 2) * (2 + 1) / (3 + 3) * (3 + 1) / (3 + 3) = 0.00285714
+
+            //empieza laplace
+            double[] Clase = new double [DatosColumna[ColumnaClase].CantidadCategorias];
+            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
+
+
+                return 0;
+        }
 
         private void DeterminarDimensiones(string DirArchivo)
         {
@@ -198,7 +257,7 @@ namespace Clasificador_Bayes_Ingenuo
         {
 
         }
-
+        
         public double Varianza(double[] values)                  //(x-media) al cuadrado
         {
             ///<summary>
