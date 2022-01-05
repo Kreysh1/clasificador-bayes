@@ -78,7 +78,6 @@ namespace Clasificador_Bayes_Ingenuo
                         //Limpiar el auxiliar
                         AuxiliarCategoria = new DatosCategoria();
                     }
-                    string Aux;
                      foreach(var val in Categoria)
                     {
                         MessageBox.Show(val.Nombre + " | " + val.TotalEncontrado);
