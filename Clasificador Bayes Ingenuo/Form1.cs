@@ -41,7 +41,8 @@ namespace Clasificador_Bayes_Ingenuo
                 open.InitialDirectory = @"C:\";
                 open.Title = "Seleccione un dataset";
                 open.DefaultExt = "csv";
-                open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*"; ;
+                open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+                
 
               //Si el txt no esta vacio y es un numero
                 if (txt_clase.Text != "" && int.TryParse(txt_clase.Text,out _))
@@ -63,7 +64,7 @@ namespace Clasificador_Bayes_Ingenuo
                             Archivo.LeerArchivo(open.FileName, Convert.ToInt32(txt_clase.Text));
                             for(int i=0; i < Archivo.Column; i++)
                             {
-                                MessageBox.Show(Archivo.DatosColumna[i]);
+                                MessageBox.Show("");
                             }
                             Form2 settingsForm = new Form2();
                             settingsForm.Show();

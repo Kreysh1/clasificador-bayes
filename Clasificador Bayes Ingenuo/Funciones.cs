@@ -20,7 +20,7 @@ namespace Clasificador_Bayes_Ingenuo
         //Dimensiones de la tabla
         public static int Column;
         public static int Rows;
-        public class InfoColumna
+        class InfoColumna
         {
             public struct DatosCategoria
             {
@@ -34,34 +34,63 @@ namespace Clasificador_Bayes_Ingenuo
             public static List<DatosCategoria> Categoria;
            
             public int TotalDeDatos = 0;
-            private bool Buscar()
+             private int Buscar(List<DatosCategoria> ListaPrincipal, DatosCategoria Busqueda)
             {
-                return false
+                for (int i = 0; i < ListaPrincipal.Count; i++)
+                {
+                    if (ListaPrincipal[i].Nombre == Busqueda.Nombre)
+                    {
+                        return i;
+                    }
+                }
+                return -1;
             }
-            void Correr(string[,] tabla, int Indice)
+            public InfoColumna(string[,] tabla, int Indice)
             {
                 //Si es un numero
                 EsNumero = double.TryParse(tabla[1, Indice], out _);
                 if (EsNumero)
                 {
 
-                }else{
-                    DatosCategoria AuxiliarCategoria= new DatosCategoria();
-                    List<DatosCategoria>
-                    for (int i=0; i <= tabla.GetUpperBound(0);i++)
-                    {
-                        Categoria.
-                        bool aux = Categoria.FindAll(x => x.Nombre == AuxiliarCategoria.Nombre);
-                        if ()
-                        {
-
-                        }
-                        System.Windows.Forms.MessageBox.Show("Se encontro: " +);
-                    }
+                }
+                else
+                {
+                    DatosCategoria AuxiliarCategoria = new DatosCategoria();
+                    //Regresa indice negativo en el caso de no encontrar el elemnto
                    
+                    //Empieza la busqueda de categorias
+                    int IndiceLista;
+
+                    for (int i = 0; i <= tabla.GetUpperBound(0); i++)
+                    {
+                        AuxiliarCategoria.Nombre = tabla[i, Indice];
+                        IndiceLista = Buscar(Categoria, AuxiliarCategoria);
+                        //Si no es negativo se incrementa el valo de encontrados
+                        if (IndiceLista != -1)
+                        {
+                            //Toma el valor de del indice de la lista para manipularlo y reInsertarlo
+                            AuxiliarCategoria = Categoria[i];
+
+                            AuxiliarCategoria.TotalEncontrado++;
+                            Categoria[i] = AuxiliarCategoria;
+                        }
+                        else
+                        {
+                            AuxiliarCategoria.Nombre = tabla[i, Indice];
+                            AuxiliarCategoria.TotalEncontrado++;
+                            Categoria.Add(AuxiliarCategoria);
+                            System.Windows.Forms.MessageBox.Show("Se encontro nueva categoria: " + tabla[i, Indice]);
+                        }
+
+                        //Limpiar el auxiliar
+                        AuxiliarCategoria = new DatosCategoria();
+                    }
+
                 }
                 CantidadCategorias = Categoria.Count;
             }
+            //Se pasa la tabla i el indice que al que sacar info
+           
         }
 
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
