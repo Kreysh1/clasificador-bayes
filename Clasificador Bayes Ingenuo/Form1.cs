@@ -23,7 +23,7 @@ namespace Clasificador_Bayes_Ingenuo
             int nWidthEllipse, // width of ellipse
             int nHeightEllipse // height of ellipse
         );
-
+        public static Archivo X = new Archivo();
         public Form1()
         {
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace Clasificador_Bayes_Ingenuo
                 open.DefaultExt = "csv";
                 open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
             
-            Archivo.LeerArchivo(@"C:\Users\alex_\Documents\Diabetes.csv",9);
+            X.LeerArchivo(@"C:\Users\alex_\Documents\Diabetes.csv",9);
                 MessageBox.Show("a");
                 Form2 settingsForm = new Form2();
                 settingsForm.Show();

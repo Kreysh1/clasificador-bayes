@@ -5,31 +5,112 @@ using System.Windows.Forms;
 
 namespace Clasificador_Bayes_Ingenuo
 {
-    public static class Archivo
+    public class Archivo
     {
-      
+        private class InfoColumna
+        {
+            public struct DatosCategoria
+            {
+                public int TotalEncontrado;
+                public string Nombre;
+            }
+            public int Indice = 1;
+            public string NombreColumna;
+            public bool EsNumero = false;
+            public int CantidadCategorias = 0;
+            public List<DatosCategoria> Categoria= new List<DatosCategoria>();
+
+            public int TotalDeDatos = 0;
+           
+            //Se pasa la tabla i el indice que al que sacar info
+
+            public void Correr(string[,] tabla, int Indice)
+            {
+                 int Buscar(DatosCategoria Busqueda)
+                {
+
+                    for (int i = 0; i < Categoria.Count; i++)
+                    {
+                        if (Categoria[i].Nombre == Busqueda.Nombre)
+                        {
+                            
+                            return i;
+                        }
+                    }
+                    return -1;
+                }
+                //Si es un numero
+                EsNumero = double.TryParse(tabla[1, Indice], out _);
+                if (EsNumero)
+                {
+
+                }
+                else
+                {
+                    DatosCategoria AuxiliarCategoria = new DatosCategoria();
+                    //Regresa indice negativo en el caso de no encontrar el elemnto
+
+                    //Empieza la busqueda de categorias
+                    int IndiceLista;
+
+                    for (int i = 0; i <= tabla.GetUpperBound(0); i++)
+                    {
+                        AuxiliarCategoria.Nombre = tabla[i, Indice];
+                        IndiceLista = Buscar(AuxiliarCategoria);
+                        //Si no es negativo se incrementa el valo de encontrados
+                        if (IndiceLista != -1)
+                        {
+                            //Toma el valor de del indice de la lista para manipularlo y reInsertarlo
+                            AuxiliarCategoria = Categoria[IndiceLista];
+
+                            AuxiliarCategoria.TotalEncontrado++;
+                            Categoria[IndiceLista] = AuxiliarCategoria;
+                        }
+                        else
+                        {
+                            AuxiliarCategoria.Nombre = tabla[i, Indice];
+                            AuxiliarCategoria.TotalEncontrado++;
+                            Categoria.Add(AuxiliarCategoria);
+                           MessageBox.Show("Se encontro nueva categoria: " + tabla[i, Indice]);
+                        }
+
+                        //Limpiar el auxiliar
+                        AuxiliarCategoria = new DatosCategoria();
+                    }
+                    string Aux;
+                     foreach(var val in Categoria)
+                    {
+                        MessageBox.Show(val.Nombre + " | " + val.TotalEncontrado);
+                    }
+                    CantidadCategorias = Categoria.Count;
+
+                }
+               
+            }
+        }
+
         //direccion del archivo
-        public static string DirActual = "";
+        public string DirActual = "";
         //Indice de la columna clase de la tabla
-        public static int ClaseIndex;
+        public int ClaseIndex;
 
         /// arreglo con con los datos recabadadosd e la tabla
-        public static string[,] TablaValores;
+        public string[,] TablaValores;
     
 
        
         //Dimensiones de la tabla
-        public static int Column;
-        public static int Rows;
+        public int Column;
+        public int Rows;
 
         //InfoColumna guarda los datos especificos a una columna
        
 
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
-         public static InfoColumna[] DatosColumna;
+         InfoColumna[] DatosColumna;
 
 
-        private static void DeterminarDimensiones(string DirArchivo)
+        private void DeterminarDimensiones(string DirArchivo)
         {
             try
             {
@@ -55,9 +136,11 @@ namespace Clasificador_Bayes_Ingenuo
 
                 for (int i = 0; i < Columnas; i++)
                 {
-                    MessageBox.Show("Entro datos columna " + i);
-             
-                    DatosColumna[i].NombreColumna = values[i];    
+                    DatosColumna[i] = new InfoColumna();
+                    DatosColumna[i].Indice = i;
+                    DatosColumna[i].NombreColumna = values[i];
+                    
+      
                 }
        
                 Column = Columnas;
@@ -76,7 +159,7 @@ namespace Clasificador_Bayes_Ingenuo
         }
 
 
-        public static void LeerArchivo(string DirArchivo, int Clase)
+        public void LeerArchivo(string DirArchivo, int Clase)
         {
             //Se dimensiona el array para guardar los datos
             DeterminarDimensiones(DirArchivo);
@@ -107,78 +190,6 @@ namespace Clasificador_Bayes_Ingenuo
         }
 
     }
-    public class InfoColumna
-    {
-        public struct DatosCategoria
-        {
-            public int TotalEncontrado;
-            public string Nombre;
-        }
-        public int Indice=1;
-        public string NombreColumna;
-        public bool EsNumero = false;
-        public int CantidadCategorias = 0;
-        public static List<DatosCategoria> Categoria;
-
-        public int TotalDeDatos = 0;
-        private int Buscar(List<DatosCategoria> ListaPrincipal, DatosCategoria Busqueda)
-        {
-            for (int i = 0; i < ListaPrincipal.Count; i++)
-            {
-                if (ListaPrincipal[i].Nombre == Busqueda.Nombre)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-        //Se pasa la tabla i el indice que al que sacar info
-        //Constructor
-        public void Correr(string[,] tabla, int Indice)
-        {
-            //Si es un numero
-            EsNumero = double.TryParse(tabla[1, Indice], out _);
-            if (EsNumero)
-            {
-
-            }
-            else
-            {
-                DatosCategoria AuxiliarCategoria = new DatosCategoria();
-                //Regresa indice negativo en el caso de no encontrar el elemnto
-
-                //Empieza la busqueda de categorias
-                int IndiceLista;
-
-                for (int i = 0; i <= tabla.GetUpperBound(0); i++)
-                {
-                    AuxiliarCategoria.Nombre = tabla[i, Indice];
-                    IndiceLista = Buscar(Categoria, AuxiliarCategoria);
-                    //Si no es negativo se incrementa el valo de encontrados
-                    if (IndiceLista != -1)
-                    {
-                        //Toma el valor de del indice de la lista para manipularlo y reInsertarlo
-                        AuxiliarCategoria = Categoria[i];
-
-                        AuxiliarCategoria.TotalEncontrado++;
-                        Categoria[i] = AuxiliarCategoria;
-                    }
-                    else
-                    {
-                        AuxiliarCategoria.Nombre = tabla[i, Indice];
-                        AuxiliarCategoria.TotalEncontrado++;
-                        Categoria.Add(AuxiliarCategoria);
-                        System.Windows.Forms.MessageBox.Show("Se encontro nueva categoria: " + tabla[i, Indice]);
-                    }
-
-                    //Limpiar el auxiliar
-                    AuxiliarCategoria = new DatosCategoria();
-                }
-
-
-            }
-            CantidadCategorias = Categoria.Count;
-        }
-    }
+    
 
 }
