@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -109,6 +110,67 @@ namespace Clasificador_Bayes_Ingenuo
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
          InfoColumna[] DatosColumna;
 
+        public void DiscretizacionFrencuencias(int intervalo)
+        {
+
+            double[] values = { 21, 21, 22, 24, 26, 29, 34, 36, 41, 44, 48, 49, 54, 56, 67, 78 };   
+
+            Array.Sort(values);
+
+            int elementos = values.Length;
+            int categorias = intervalo;
+            double rangos = elementos/categorias;
+            int i = 1;
+            int pivote = (int)rangos;
+            double decimals = rangos - Math.Truncate(rangos);
+            string tipo  = "a";
+            string[,] disc = new string[categorias,3];
+            
+            //if (decimals < 5)
+            //{
+            //    int pivote = (int)rangos;
+            //    tipo = "bajo";
+            //}
+            //else if (decimals == 5)
+            //{
+            //    int pivote = (int)Math.Round(rangos);
+            //    tipo = "medio";
+            //}
+            //else if (decimals >= 5) {
+            //    int pivote = (int)Math.Round(rangos);
+            //    tipo = "alto";
+            //}
+
+            foreach (double value in values)
+            {
+                if (i == pivote && i<values.Length)
+                {
+                    double valor = (values[pivote] + values[pivote-1])/2;
+
+                    int x = 0;
+                    disc[x, 0] = $"Cat{x+1}";
+                    disc[x, 1] = "wea";
+                    disc[x, 2] = valor.ToString();
+                    MessageBox.Show($"{disc[x, 0]} {disc[x, 1]} {disc[x, 2]}");
+                    pivote += (int)rangos;
+                }
+                i++;
+                
+                //if (tipo == "bajo")
+                //{
+                    
+                //}
+                //else if (tipo == "medio")
+                //{
+
+                //}
+                //else if (tipo == "alto")
+                //{
+
+                //}
+            }
+        }
+
 
         private void DeterminarDimensiones(string DirArchivo)
         {
@@ -189,22 +251,8 @@ namespace Clasificador_Bayes_Ingenuo
             reader.Close();
         }
 
-        public void DiscretizacionFrecuencias(string[,] arreglo)
-        {
-
-        }
-
-        public void FuncionDensidad()
-        {
-
-        }
-
         public double Varianza(double[] values)                  //(x-media) al cuadrado
         {
-            ///<summary>
-            ///<para>line1</para>
-            ///<para>line2</para>
-            ///</summary>
             double avg = Media(values);
             double variance = 0.0;
 
@@ -236,11 +284,6 @@ namespace Clasificador_Bayes_Ingenuo
         {
             return Math.Sqrt(variance);
         }
-
-
-
-
-
 
     }
     
