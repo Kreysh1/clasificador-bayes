@@ -43,14 +43,14 @@ namespace Clasificador_Bayes_Ingenuo
                 open.DefaultExt = "csv";
                 open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*"; ;
 
-
-                if (txt_clase.Text != "")
+              //Si el txt no esta vacio y es un numero
+                if (txt_clase.Text != "" && int.TryParse(txt_clase.Text,out _))
                 {
                     //Si el recuadro no esta vacio se abre con la direccion puesta
                     if (txt_dataset.Text != "")
                     {
 
-                        Archivo.LeerArchivo(txt_dataset.Text);
+                        Archivo.LeerArchivo(txt_dataset.Text , Convert.ToInt32(txt_clase.Text));
 
                         Form2 settingsForm = new Form2();
                         settingsForm.Show();
@@ -60,7 +60,11 @@ namespace Clasificador_Bayes_Ingenuo
                         //Si el recuadro se abre se abre el la interfaz para
                         if (open.ShowDialog() == DialogResult.OK)
                         {
-                            Archivo.LeerArchivo(open.FileName);
+                            Archivo.LeerArchivo(open.FileName, Convert.ToInt32(txt_clase.Text));
+                            for(int i=0; i < Archivo.Column; i++)
+                            {
+                                MessageBox.Show(Archivo.DatosColumna[i]);
+                            }
                             Form2 settingsForm = new Form2();
                             settingsForm.Show();
                         }
