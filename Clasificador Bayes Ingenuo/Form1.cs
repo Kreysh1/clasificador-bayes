@@ -32,8 +32,7 @@ namespace Clasificador_Bayes_Ingenuo
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try{
                 //Crea el dialogo para escoger el archivo
                 OpenFileDialog open = new OpenFileDialog();
                 open.CheckFileExists = true;
@@ -42,54 +41,59 @@ namespace Clasificador_Bayes_Ingenuo
                 open.Title = "Seleccione un dataset";
                 open.DefaultExt = "csv";
                 open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
-                
-
-              //Si el txt no esta vacio y es un numero
-                if (txt_clase.Text != "" && int.TryParse(txt_clase.Text,out _))
+            
+            Archivo.LeerArchivo(@"C:\Users\alex_\Documents\Diabetes.csv",9);
+                MessageBox.Show("a");
+                Form2 settingsForm = new Form2();
+                settingsForm.Show();
+            /*
+          //Si el txt no esta vacio y es un numero
+            if (txt_clase.Text != "" && int.TryParse(txt_clase.Text,out _))
+            {
+                //Si el recuadro no esta vacio se abre con la direccion puesta
+                if (txt_dataset.Text != "")
                 {
-                    //Si el recuadro no esta vacio se abre con la direccion puesta
-                    if (txt_dataset.Text != "")
+
+                    Archivo.LeerArchivo(txt_dataset.Text , Convert.ToInt32(txt_clase.Text));
+
+                    MessageBox.Show("");
+                    Form2 settingsForm = new Form2();
+                    settingsForm.Show();
+                }
+                else
+                {
+                    //Si el recuadro se abre se abre el la interfaz para
+                    if (open.ShowDialog() == DialogResult.OK)
                     {
-
-                        Archivo.LeerArchivo(txt_dataset.Text , Convert.ToInt32(txt_clase.Text));
-
+                        Archivo.LeerArchivo(open.FileName, Convert.ToInt32(txt_clase.Text));
+                        for(int i=0; i < Archivo.Column; i++)
+                        {
+                            MessageBox.Show("");
+                        }
                         Form2 settingsForm = new Form2();
                         settingsForm.Show();
                     }
                     else
                     {
-                        //Si el recuadro se abre se abre el la interfaz para
-                        if (open.ShowDialog() == DialogResult.OK)
-                        {
-                            Archivo.LeerArchivo(open.FileName, Convert.ToInt32(txt_clase.Text));
-                            for(int i=0; i < Archivo.Column; i++)
-                            {
-                                MessageBox.Show("");
-                            }
-                            Form2 settingsForm = new Form2();
-                            settingsForm.Show();
-                        }
-                        else
-                        {
-                            MessageBox.Show("No se selecciono un archivo");
-                        }
-
+                        MessageBox.Show("No se selecciono un archivo");
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Indique la columna de clase");
-                }
 
+                }
             }
-            catch(Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Indique la columna de clase");
             }
-            
-          
-            
-           
+
+        }
+        catch(Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
+
+      */
+
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
