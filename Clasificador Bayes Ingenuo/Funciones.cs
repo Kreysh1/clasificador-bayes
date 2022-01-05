@@ -189,6 +189,59 @@ namespace Clasificador_Bayes_Ingenuo
             reader.Close();
         }
 
+        public void DiscretizacionFrecuencias(string[,] arreglo)
+        {
+
+        }
+
+        public void FuncionDensidad()
+        {
+
+        }
+
+        public double Varianza(double[] values)                  //(x-media) al cuadrado
+        {
+            ///<summary>
+            ///<para>line1</para>
+            ///<para>line2</para>
+            ///</summary>
+            double avg = Media(values);
+            double variance = 0.0;
+
+            foreach (double value in values)
+            {
+                // Math.Pow => Devuelve un número especificado elevado a la potencia especificada.
+                variance += Math.Pow(value - avg, 2.0);
+            }
+            return variance;
+        }
+        public double Suma(double[] values)     //Suma los valores de la columna
+        {
+            double sum = 0;
+            for (int i = 0; i < values.Length; i++)
+            {
+                sum += values[i];
+            }
+            return sum;
+        }
+
+        public double Media(double[] values) //Promedio
+        {
+            double sum = Suma(values);
+            double avg = sum / values.Length;
+            return avg;
+        }
+
+        public double DesviacionEstandar(double variance)        //Raiz cuadrada de la varianza  (DESVEST.P para poblacion)
+        {
+            return Math.Sqrt(variance);
+        }
+
+
+
+
+
+
     }
     
 

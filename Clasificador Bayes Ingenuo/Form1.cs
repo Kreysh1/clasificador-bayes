@@ -41,9 +41,12 @@ namespace Clasificador_Bayes_Ingenuo
                 open.Title = "Seleccione un dataset";
                 open.DefaultExt = "csv";
                 open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+
             
+
             X.LeerArchivo(@"C:\Users\alex_\Documents\Diabetes.csv",9);
-                MessageBox.Show("a");
+
+            MessageBox.Show("a");
                 Form2 settingsForm = new Form2();
                 settingsForm.Show();
             /*
@@ -93,6 +96,55 @@ namespace Clasificador_Bayes_Ingenuo
 
       */
 
+            /// >>>> LO MIO
+            //try
+            //{
+            //    // Open File Dialog
+            //    openFileDialog1.Filter = "Archivo de Texto|*.txt|Archivo Separado por comas|*.csv|Todos los archivos|*.*";
+            //    openFileDialog1.Title = "Cargar Dataset";
+            //    openFileDialog1.ShowDialog();
+
+            //    if (File.Exists(openFileDialog1.FileName))
+            //    {
+            //        //Leer archivo y cargarlo en un array
+
+            //        Leer_Archivos funciones = new Leer_Archivos();
+
+            //        string[,] arreglo1 = { };
+
+            //        arreglo1 = funciones.LeerArchivo(arreglo1, openFileDialog1.FileName);
+
+            //        //Tabulacion
+            //        for (int i = 0; i <= arreglo1.GetUpperBound(0); i++)
+            //        {
+            //            string row = "";
+
+            //            for (int j = 0; j <= arreglo1.GetUpperBound(1); j++)
+            //            {
+            //                //row += arreglo1[i, j] + ' ';
+            //                string texto = arreglo1[i, j];
+            //                string tabs;
+
+            //                if ((texto.Length >= 10))
+            //                {
+            //                    tabs = "\t";
+            //                }
+            //                else
+            //                {
+            //                    tabs = "\t\t";
+            //                }
+            //                row += $"{texto} {tabs}";
+            //            }
+
+            //            consoleList.Items.Add(row);
+            //        }
+            //        numUpDown.Maximum = arreglo1.GetUpperBound(1) + 1;
+            //    }
+            //}
+            //catch (Exception)
+            //{
+            //    MessageBox.Show("Error: al abrir el archivo");
+            //}
 
         }
 
