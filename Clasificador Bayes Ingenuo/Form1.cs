@@ -123,12 +123,10 @@ namespace Clasificador_Bayes_Ingenuo
             //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
 
 
-            string[] temp = { "amarillo", "no", "peque~no", "alta", "" };
-            Pruebas.Add(temp);
-            Datos.SuavisadoLaplacae(4, Pruebas);
+            //string[] temp = { "amarillo", "no", "peque~no", "alta", "" };
+            //Pruebas.Add(temp);
+            //Datos.SuavisadoLaplacae(Pruebas, 4);
 
-
-            MessageBox.Show("a");
             Form2 settingsForm = new Form2();
             settingsForm.Show();
         }

@@ -340,18 +340,18 @@ namespace Clasificador_Bayes_Ingenuo
 
                     int elementos = sortedValues.Length;
                     int categorias = intervalo;
-                    double rangos = elementos / categorias;
-
+                    double rangos = (double)elementos / (double)categorias;
+                    rangos = Math.Round(rangos,0);
+                    MessageBox.Show($"Rangos:{rangos.ToString("F2")}Categorias:{categorias.ToString()}");
 
                     int pivote = (int)rangos;
-                    double decimals = rangos - Math.Truncate(rangos);
                     string[,] disc = new string[categorias, 3];
 
                     //Detectar valor de los rangos ===========================
                     int x = 0;
                     for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
                     {
-                        if ((j == pivote) && (j < sortedValues.Length))
+                        if ((j == pivote-1) && (j < sortedValues.Length-1))
                         {
                             double valor = (Convert.ToDouble(sortedValues[pivote]) + Convert.ToDouble(sortedValues[pivote - 1])) / 2;
 
@@ -374,16 +374,21 @@ namespace Clasificador_Bayes_Ingenuo
                             {
                                 disc[x, 2] = valor.ToString();
                             }
-                           // MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                            MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
                             pivote += (int)rangos;
+                            MessageBox.Show($"Pivote:{pivote} sortedLength: {sortedValues.Length}");
                             x++;
                         }
                     }
+                    MessageBox.Show(x.ToString());
+                    if (x < categorias)
+                    {
+                        disc[x, 0] = $"Cat{x + 1}";
+                        disc[x, 1] = disc[x - 1, 2];                                    //MAYOR O IGUAL
+                        disc[x, 2] = "99999999999999999999999999999999999999";          //MENOR
+                        //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                    }
 
-                    disc[x, 0] = $"Cat{x + 1}";
-                    disc[x, 1] = disc[x - 1, 2];                                    //MAYOR O IGUAL
-                    disc[x, 2] = "99999999999999999999999999999999999999";          //MENOR
-                    //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
 
                     ////Discretizacion ==================================
 
