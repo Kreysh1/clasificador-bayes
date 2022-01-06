@@ -98,6 +98,7 @@ namespace Clasificador_Bayes_Ingenuo
 
         /// arreglo con con los datos recabadadosd e la tabla
         public string[,] TablaValores;
+        public string[] TablaTitulos;
         public string[] ValoresPrueba;
 
        
@@ -428,6 +429,7 @@ namespace Clasificador_Bayes_Ingenuo
                 //Se crea la tabla y se ommite la primera fila para el tamano de la tabla de datos
                 TablaValores = new string[Fila-1, Columnas];
                 TablaDiscretizada = new string[Fila - 1, Columnas];
+                TablaTitulos =  new string[Columnas];
 
                 for (int i = 0; i < Columnas; i++)
                 {
@@ -440,7 +442,7 @@ namespace Clasificador_Bayes_Ingenuo
                 Rows = Fila;
                
 
-                System.Windows.Forms.MessageBox.Show(Fila + " | " + Columnas + " \n " + TablaValores.GetUpperBound(0) + " | " + TablaValores.GetUpperBound(1));
+                //MessageBox.Show(Fila + " | " + Columnas + " \n " + TablaValores.GetUpperBound(0) + " | " + TablaValores.GetUpperBound(1));
                 Reader.Close();
             }
             catch (Exception e)
@@ -452,16 +454,15 @@ namespace Clasificador_Bayes_Ingenuo
         }
 
 
-        public void LeerArchivo(string DirArchivo, int Clase)
+        public void LeerArchivo(string DirArchivo)
         {
             //Se dimensiona el array para guardar los datos
             DeterminarDimensiones(DirArchivo);
-            ClaseIndex = Clase;
             StreamReader reader = new StreamReader(File.OpenRead(DirArchivo));
            
      
             int FilaActual = 0;
-            reader.ReadLine();//Se salta los nombres de columnas
+            TablaTitulos = reader.ReadLine().Split(',');//Se salta los nombres de columnas
             //Se puebla el array con datos
             while (!reader.EndOfStream)
             {
@@ -478,8 +479,24 @@ namespace Clasificador_Bayes_Ingenuo
                 DatosColumna[i].Correr(TablaValores,i);
             }
 
-
             reader.Close();
+        }
+
+
+        public void FuncionDensidad(string [,] values, int clase)
+        {
+            double[] columna = new double[values.GetUpperBound(0) + 1];
+            double[] calculos = new double[2];   //Aquí se guardara la media y la desviacion estandar de cada columna
+
+            //Carga la columna en un array unidimensional
+            for (int i = 0; i <= values.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j <= values.GetUpperBound(0); j++)
+                {
+                    //MessageBox.Show(values[j, i]);
+                    columna[i] = Convert.ToDouble(values[j, i]);
+                }  
+            }
         }
 
         public double Varianza(double[] values)                  //(x-media) al cuadrado

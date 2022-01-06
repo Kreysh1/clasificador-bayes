@@ -8,53 +8,63 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Clasificador_Bayes_Ingenuo
 {
     public partial class Form1 : Form
     {
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn
-        (
-            int nLeftRect,     // x-coordinate of upper-left corner
-            int nTopRect,      // y-coordinate of upper-left corner
-            int nRightRect,    // x-coordinate of lower-right corner
-            int nBottomRect,   // y-coordinate of lower-right corner
-            int nWidthEllipse, // width of ellipse
-            int nHeightEllipse // height of ellipse
-        );
         public static Archivo Datos = new Archivo();
-        public Form1()
-        {
-            InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None;
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
-        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            //try{
-                //Crea el dialogo para escoger el archivo
-                OpenFileDialog open = new OpenFileDialog();
-                open.CheckFileExists = true;
-                open.CheckPathExists = true;
-                open.InitialDirectory = @"C:\";
-                open.Title = "Seleccione un dataset";
-                open.DefaultExt = "csv";
-                open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
 
-           // Datos.LeerArchivo(@"C:\tmp\Diabetes.csv",int.Parse(txt_clase.Text));
-            List<string[]>Pruebas = new List<string[]>();
-            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
+            try
+            {
+                // Open File Dialog
+                openFileDialog1.Filter = "Todos los archivos|*.*|Archivo de Texto|*.txt|Archivo Separado por comas|*.csv";
+                openFileDialog1.Title = "Cargar Dataset";
+                openFileDialog1.ShowDialog();
 
+                if (File.Exists(openFileDialog1.FileName))
+                {
+                    txt_dataset.Text = openFileDialog1.FileName;
+                    Datos.LeerArchivo(txt_dataset.Text);
+                    numUpDown.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
 
-            string[] temp = { "amarillo", "no", "peque~no", "alta", "" };
-            Pruebas.Add(temp);
-            Datos.SuavisadoLaplacae(4, Pruebas);
+                    dgvDataset.Columns.Clear();
+                    dgvDataset.Rows.Clear();
 
+                    for (int i = 0; i <= Datos.TablaValores.GetUpperBound(1); i++)
+                    {
+                        dgvDataset.Columns.Add($"Columna{i}", Datos.TablaTitulos[i].ToString());  
+                    }
 
-            MessageBox.Show("a");
-                Form2 settingsForm = new Form2();
-                settingsForm.Show();
+                    for (int i = 0; i <= Datos.TablaValores.GetUpperBound(0); i++)
+                    {
+                        dgvDataset.Rows.Add();
+                        for (int j = 0; j <= Datos.TablaValores.GetUpperBound(1); j++)
+                        {
+                            dgvDataset.Rows[i].Cells[j].Value = Datos.TablaValores[i,j];
+                        }                      
+                    }
+                       
+
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error: al abrir el archivo");
+            }
+
+            //Crea el dialogo para escoger el archivo
+            //OpenFileDialog open = new OpenFileDialog();
+            //open.CheckFileExists = true;
+            //open.CheckPathExists = true;
+            //open.InitialDirectory = @"C:\";
+            //open.Title = "Seleccione un dataset";
+            //open.DefaultExt = "csv";
+            //open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
             /*
           Si el txt no esta vacio y es un numero
             if (txt_clase.Text != "" && int.TryParse(txt_clase.Text,out _))
@@ -104,14 +114,27 @@ namespace Clasificador_Bayes_Ingenuo
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             //Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text));
+            //, int.Parse(numUpDown.Text)
+            Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
+            List<string[]> Pruebas = new List<string[]>();
+            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
+
+
+            string[] temp = { "amarillo", "no", "peque~no", "alta", "" };
+            Pruebas.Add(temp);
+            Datos.SuavisadoLaplacae(4, Pruebas);
+
+
+            MessageBox.Show("a");
+            Form2 settingsForm = new Form2();
+            settingsForm.Show();
+        }
+        public Form1()
+        {
+            InitializeComponent();
         }
     }
 }

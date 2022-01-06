@@ -47,10 +47,14 @@ namespace Clasificador_Bayes_Ingenuo
             this.label5 = new System.Windows.Forms.Label();
             this.txt_intervalo = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.txt_clase = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.numUpDown = new System.Windows.Forms.NumericUpDown();
+            this.dgvDataset = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -241,14 +245,6 @@ namespace Clasificador_Bayes_Ingenuo
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // txt_clase
-            // 
-            this.txt_clase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_clase.Location = new System.Drawing.Point(150, 126);
-            this.txt_clase.Name = "txt_clase";
-            this.txt_clase.Size = new System.Drawing.Size(60, 22);
-            this.txt_clase.TabIndex = 11;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -259,13 +255,43 @@ namespace Clasificador_Bayes_Ingenuo
             this.label6.TabIndex = 12;
             this.label6.Text = "Colummna de clase";
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // numUpDown
+            // 
+            this.numUpDown.Location = new System.Drawing.Point(150, 126);
+            this.numUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numUpDown.Name = "numUpDown";
+            this.numUpDown.Size = new System.Drawing.Size(62, 20);
+            this.numUpDown.TabIndex = 13;
+            this.numUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // dgvDataset
+            // 
+            this.dgvDataset.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDataset.Location = new System.Drawing.Point(590, 85);
+            this.dgvDataset.Name = "dgvDataset";
+            this.dgvDataset.Size = new System.Drawing.Size(613, 415);
+            this.dgvDataset.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tomato;
-            this.ClientSize = new System.Drawing.Size(604, 543);
-            this.Controls.Add(this.txt_clase);
+            this.ClientSize = new System.Drawing.Size(1215, 543);
+            this.Controls.Add(this.dgvDataset);
+            this.Controls.Add(this.numUpDown);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.txt_intervalo);
@@ -279,11 +305,12 @@ namespace Clasificador_Bayes_Ingenuo
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "Clasificador Bayes Ingenuo";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -309,8 +336,10 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txt_intervalo;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox txt_clase;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.NumericUpDown numUpDown;
+        private System.Windows.Forms.DataGridView dgvDataset;
     }
 }
 
