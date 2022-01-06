@@ -124,7 +124,7 @@ namespace Clasificador_Bayes_Ingenuo
             int rInt = r.Next(0, Rango);
             return rInt;
         }
-        void entrenar(int CantidadGenerar, int ColumnaClase)
+       public void Entrenar(int CantidadGenerar, int ColumnaClase)
         {
             if (TablaDiscreta.Count < 1)
             {
