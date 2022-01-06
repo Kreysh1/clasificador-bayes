@@ -17,12 +17,13 @@ namespace Clasificador_Bayes_Ingenuo
             }
             public int Indice = 1;
             public string NombreColumna;
+            public bool EsClase = false;
             public bool EsNumero = false;
             public int CantidadCategorias = 0;
             public List<DatosCategoria> Categoria= new List<DatosCategoria>();
 
             public int TotalDeDatos = 0;
-           
+            
             //Se pasa la tabla i el indice que al que sacar info
 
             public void Correr(string[,] tabla, int Indice)
@@ -105,10 +106,194 @@ namespace Clasificador_Bayes_Ingenuo
         public int Rows;
 
         //InfoColumna guarda los datos especificos a una columna
-       
+        public double SuavisadoLaplacae(int ColumnaClase, List<string[]> input)
+        {
+
+            string[,] Aux = {
+                            {"negro","si","peque~no","alta","+"},
+                            {"amarillo","no","grande","media","-"},
+                            {"amarillo","no","grande","baja","-"},
+                            {"blanco","si","medio","alta","+"},
+                            {"negro","no","medio","alta","-"},
+                            {"rojo","si","peque~no","alta","+"},
+                            {"rojo","si","peque~no","baja","-"},
+                            {"negro","no","medio","media","-"},
+                            {"negro","si","peque~no","media","-"},
+                            {"amarillo","si","grande","media","-"}
+            };
+            TablaValores = Aux;
+            DatosColumna = new InfoColumna[TablaValores.GetLength(1)];
+            Rows = TablaValores.GetLength(0);
+            string[] Cadena = { "color", "alas", "tamañno", "velocidad ", "lepisto" };
+            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
+            {
+                DatosColumna[i] = new InfoColumna();
+                DatosColumna[i].Indice = i;
+                DatosColumna[i].NombreColumna = Cadena[i];
+                if (i == (ColumnaClase))
+                {
+                    DatosColumna[i].EsClase = true;
+                }
+            }
+            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
+            {
+                DatosColumna[i].Correr(TablaValores, i);
+
+            }
+            //Convierte la tabla en una lista de vectores string
+            List<string[]> TablaLista = new List<string[]>();
+
+            for (int i = 0; i <= TablaValores.GetUpperBound(0); i++)
+            {
+                string[] Temp = new string[TablaValores.GetLength(1)];
+                for (int j = 0; j <= TablaValores.GetUpperBound(1); j++)
+                {
+                    Temp[j] = TablaValores[i, j];
+                }
+                TablaLista.Add(Temp);
+            }
+
+            int ContarIndicidencia(int indiceSearch, string Categoria, string CategoriaCadena)
+            {
+                int Contar = 0;
+                for (int i = 0; i < TablaLista.Count; i++)
+                {
+
+
+                    //&& TablaLista[i][ColumnaClase] == CategoriaCadena
+                    if (TablaLista[i][indiceSearch] == Categoria)
+                    {
+                        if (TablaLista[i][ColumnaClase] == CategoriaCadena)
+                        {
+                            //MessageBox.Show("Se encontro incidencia" + "\n" + TablaLista[i][indiceSearch] + " | " + TablaLista[i][ColumnaClase]);
+                            Contar++;
+                        }
+
+                    }
+
+                }
+
+
+                return Contar;
+            }
+            MessageBox.Show("Incidencio: " + ContarIndicidencia(0, "amarillo", "-") + "");
+            //p(+) = 3 / 10
+            //p(Amarillo | +) = (0 + 1) / (3 + 4)
+            //p(no | +) = (0 + 1) / (3 + 2)
+            //p(pequeño | +) = (2 + 1) / (3 + 3)
+            //p(alta | +) = (3 + 1) / (3 + 3)
+
+            //p(-) = 7 / 10
+            //P(Amarillo | -) = (3 + 1) / (7 + 4)
+            //p(no | -) = (4 + 1) / (7 + 2)
+            //p(pequeño | -) = (2 + 1) / (7 + 3)
+            //p(alta | -) = (1 + 1) / (7 + 3)
+
+            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
+            //3 / 10 * (0 + 1) / (3 + 4) * (0 + 1) / (3 + 2) * (2 + 1) / (3 + 3) * (3 + 1) / (3 + 3) = 0.00285714
+
+
+            //P(-) P(Amarillo |-) P(no |-) P(pequeño |-) P(alta |-) = 0.007
+            // 7 / 10 * (3 + 1) / (7 + 4) * (4 + 1) / (7 + 2) * (2 + 1) / (7 + 3) * (1 + 1) / (7 + 3) = 0.00848485
+
+            //empieza laplace
+            //almacena el resultado de cada bayes 
+            double[] Clase = new double[DatosColumna[ColumnaClase].CantidadCategorias];
+            //Ciclo para obtener el 
+            double bayesSuave(string[] Entrada, int IndiceClase) {
+
+                double[] AuxiliarBayes = new double[DatosColumna.GetLength(0)];
+
+                // I controla la Categoria Clase 
+                //Nombre de la categoria interesada
+                string Categoria = DatosColumna[ColumnaClase].Categoria[IndiceClase].Nombre;
+
+                //Ciclo para sacar el bayes
+
+
+                for (int i = 0; i <= Entrada.GetUpperBound(0); i++)
+                {
+
+                    double Arriba;
+                    double Abajo;
+                    if (i == ColumnaClase)
+                    {
+                        Arriba = DatosColumna[i].Categoria[IndiceClase].TotalEncontrado;
+                        Abajo = TablaLista.Count;
+                        MessageBox.Show(i + "CLASE| " + Arriba + "\n" + Abajo);
+                        // P =  Categoria / Total de del atributos
+                        AuxiliarBayes[i] = Arriba / Abajo;
+
+                    }
+                    else
+                    {
+                        //MessageBox.Show((ContarIndicidencia(i, Entrada[i], Categoria) + 1)+ "\n" +( DatosColumna[ColumnaClase].Categoria[IndiceClase].TotalEncontrado + DatosColumna[i].CantidadCategorias));
+
+                        Arriba = (ContarIndicidencia(i, Entrada[i], Categoria) + 1);
+                        Abajo = (DatosColumna[ColumnaClase].Categoria[IndiceClase].TotalEncontrado + DatosColumna[i].CantidadCategorias);
+
+                        MessageBox.Show(i + "| " + Arriba + "\n" + Abajo);
+                        AuxiliarBayes[i] = Arriba / Abajo;
+
+
+                    }
+                    MessageBox.Show("Bayes Aux: " + AuxiliarBayes[i] + "");
+
+                }
+
+
+
+
+
+                double Resultado = 1;
+                //Resultado del calculo
+                for (int i = 0; i <= AuxiliarBayes.GetUpperBound(0); i++)
+                {
+                    Resultado = Resultado * AuxiliarBayes[i];
+                }
+                MessageBox.Show("Resul " + Resultado);
+                return Resultado;
+            }
+
+
+            //Se calcula el valor para cada clase
+            for (int i = 0; i < input.Count; i++) {
+                for (int j = 0; j <= Clase.GetUpperBound(0); j++)
+                {
+
+                    Clase[j] = bayesSuave(input[i], j);
+
+                    MessageBox.Show("Clase: " + Clase[j] + "\n Indice: " + j + " " + DatosColumna[ColumnaClase].Categoria[j].Nombre);
+                }
+            }
+
+            //Se determina a cual clase pertenece
+            double[] MayorDeArreglo(double[] Arreglo)
+            {
+                //Guarda el indice al que pertenece en el 1 y en el 0, su valor
+                double[] Mayor = new double[2];
+                Mayor[0] = Arreglo[0];
+                Mayor[1] = 0;
+                for (int i = 0; i <= Arreglo.GetUpperBound(0); i++)
+                {
+                    if (Arreglo[i] > Mayor[0])
+                    {
+                        Mayor[0] = Arreglo[i];
+                        Mayor[1] = i;
+                    }
+                }
+                return Mayor;
+            }
+            double[] Resul = MayorDeArreglo(Clase);
+            int indice = ((int)Resul[1]);
+
+            MessageBox.Show("Fue :" + DatosColumna[ColumnaClase].Categoria[indice].Nombre );
+
+            return 0;
+        }
 
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
-         InfoColumna[] DatosColumna;
+        InfoColumna[] DatosColumna;
 
         //Tabla discretizada
         public string[,] TablaDiscretizada;
