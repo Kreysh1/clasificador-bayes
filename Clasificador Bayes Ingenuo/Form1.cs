@@ -42,11 +42,9 @@ namespace Clasificador_Bayes_Ingenuo
                 open.DefaultExt = "csv";
                 open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
 
-            Datos.LeerArchivo(@"C:\tmp\Diabetes.csv",int.Parse(txt_clase.Text));
+            Datos.LeerArchivo(@"C:\tmp\PruebaDisc.csv",int.Parse(txt_clase.Text));
+            Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
 
-
-
-            MessageBox.Show("a");
                 Form2 settingsForm = new Form2();
                 settingsForm.Show();
             /*
@@ -105,7 +103,7 @@ namespace Clasificador_Bayes_Ingenuo
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text));
+            //Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text));
         }
     }
 }

@@ -113,49 +113,109 @@ namespace Clasificador_Bayes_Ingenuo
         //Tabla discretizada
         public string[,] TablaDiscretizada;
 
-        public void DiscretizacionFrencuencias(int intervalo)
+        public void DiscretizacionFrencuencias(int intervalo, string[,] values)
         {
-
-            double[] values = { 21, 21, 22, 24, 26, 29, 34, 36, 41, 44, 48, 49, 54, 56, 67, 78 };
-
-            Array.Sort(values);
-
-            int elementos = values.Length;
-            int categorias = intervalo;
-            double rangos = elementos / categorias;
-
-            int pivote = (int)rangos;
-            double decimals = rangos - Math.Truncate(rangos);
-            string[,] disc = new string[categorias, 3];
-
-            //Detectar valor de los rangos
-            int x = 0;
-            int i = 1;
-            foreach (double value in values)
+            for (int i = 0; i <= values.GetUpperBound(1); i++)
             {
-                if (i == pivote && i<values.Length)
+                bool EsNumero = double.TryParse(values[0, i], out _); // Comprueba que el primer valor de la columna sea un numero (valor continuo)
+                if (EsNumero)
                 {
-                    double valor = (values[pivote] + values[pivote-1])/2;
 
-                    disc[x, 0] = $"Cat{x+1}";
-                    disc[x, 1] = "menor que";
-                    disc[x, 2] = valor.ToString();
-                    MessageBox.Show($"{disc[x, 0]} {disc[x, 1]} {disc[x, 2]}");
-                    pivote += (int)rangos;
-                    x++;
+                    double[] sortedValues = new double[values.GetUpperBound(0)+1];
+
+                    //Carga la columna en un array unidimensional
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {
+                        //MessageBox.Show(values[j, i]);
+                        sortedValues[j] = Convert.ToDouble(values[j, i]);
+                    }
+
+                    Array.Sort(sortedValues);
+
+                    int elementos = sortedValues.Length;
+                    int categorias = intervalo;
+                    double rangos = elementos / categorias;
+
+
+                    int pivote = (int)rangos;
+                    double decimals = rangos - Math.Truncate(rangos);
+                    string[,] disc = new string[categorias, 3];
+
+                    //Detectar valor de los rangos ===========================
+                    int x = 0;
+                    for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
+                    {
+                        if ((j == pivote) && (j < sortedValues.Length))
+                        {
+                            double valor = (Convert.ToDouble(sortedValues[pivote]) + Convert.ToDouble(sortedValues[pivote - 1])) / 2;
+
+                            disc[x, 0] = $"Cat{x + 1}";
+                            //Valors "MAYOR O IGUAL QUE"
+                            if (x == 0)
+                            {
+                                disc[x, 1] = "0";
+                            }
+                            else
+                            {
+                                disc[x, 1] = disc[x - 1, 2];
+                            }
+                            //Valors "MENOR"
+                            if (x == categorias - 1)
+                            {
+                                disc[x, 2] = "9999999999999";
+                            }
+                            else
+                            {
+                                disc[x, 2] = valor.ToString();
+                            }
+                           // MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                            pivote += (int)rangos;
+                            x++;
+                        }
+                    }
+
+                    disc[x, 0] = $"Cat{x + 1}";
+                    disc[x, 1] = disc[x - 1, 2];                                    //MAYOR O IGUAL
+                    disc[x, 2] = "99999999999999999999999999999999999999";          //MENOR
+                    //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+
+                    ////Discretizacion ==================================
+
+                    //Vuelve a cargar los datos de la columna (para que no salgan ordenados)
+                    //Carga la columna en un array unidimensional
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {
+                        //MessageBox.Show(values[j, i]);
+                        sortedValues[j] = Convert.ToDouble(values[j, i]);
+                    }
+
+                    //Para el array con todos los valores.
+                    x = 0;
+                    for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
+                    {
+                        if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[x, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[x, 2])))
+                        {
+                            TablaDiscretizada[j, i] = disc[x, 0];
+                            MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
+                        }
+                        else if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[x + 1, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[x + 1, 2])))
+                        {
+                            x++;
+                            TablaDiscretizada[j, i] = disc[x, 0];
+                            MessageBox.Show($"{sortedValues[j]} = {TablaDiscretizada[j, i]}");
+                        }
+                    }
+
                 }
-                i++;
-            }
-            disc[x, 0] = $"Cat{x + 1}";
-            disc[x, 1] = "mayor o igual";
-            disc[x, 2] = disc[x - 1, 2];
-            MessageBox.Show($"{disc[x, 0]} {disc[x, 1]} {disc[x, 2]}");
-
-            TablaDiscretizada = new string[TablaValores.GetUpperBound(0), TablaValores.GetUpperBound(1)];
-            //Discretizacion
-            foreach (double value in values)
-            {
-                
+                else
+                {
+                    // Aca entra cuando los valores de la columna son discretos (osea que los valores son categorias)
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {
+                        MessageBox.Show(values[j, i]);
+                        TablaDiscretizada[j, i] = values[j, i];
+                    }
+                }
             }
         }
 
@@ -181,15 +241,14 @@ namespace Clasificador_Bayes_Ingenuo
                 DatosColumna = new InfoColumna[Columnas];
 
                 //Se crea la tabla y se ommite la primera fila para el tamano de la tabla de datos
-                TablaValores = new string[Fila-1, Columnas];             
+                TablaValores = new string[Fila-1, Columnas];
+                TablaDiscretizada = new string[Fila - 1, Columnas];
 
                 for (int i = 0; i < Columnas; i++)
                 {
                     DatosColumna[i] = new InfoColumna();
                     DatosColumna[i].Indice = i;
                     DatosColumna[i].NombreColumna = values[i];
-                    
-      
                 }
        
                 Column = Columnas;
@@ -271,8 +330,5 @@ namespace Clasificador_Bayes_Ingenuo
         {
             return Math.Sqrt(variance);
         }
-
     }
-    
-
 }
