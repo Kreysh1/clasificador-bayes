@@ -45,7 +45,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txt_intervalo = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.txt_clase = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -222,13 +222,13 @@ namespace Clasificador_Bayes_Ingenuo
             this.label5.TabIndex = 9;
             this.label5.Text = "Intervalo de discretización:";
             // 
-            // textBox3
+            // txt_intervalo
             // 
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(233, 465);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(60, 22);
-            this.textBox3.TabIndex = 8;
+            this.txt_intervalo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_intervalo.Location = new System.Drawing.Point(233, 465);
+            this.txt_intervalo.Name = "txt_intervalo";
+            this.txt_intervalo.Size = new System.Drawing.Size(60, 22);
+            this.txt_intervalo.TabIndex = 8;
             // 
             // button2
             // 
@@ -239,6 +239,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.button2.TabIndex = 10;
             this.button2.Text = "Análisis";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // txt_clase
             // 
@@ -267,7 +268,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.Controls.Add(this.txt_clase);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txt_intervalo);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -306,7 +307,7 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.RadioButton radioButton6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txt_intervalo;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox txt_clase;
         private System.Windows.Forms.Label label6;

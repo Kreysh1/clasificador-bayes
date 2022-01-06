@@ -1,21 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
 namespace Clasificador_Bayes_Ingenuo
 {
-    
     public class Archivo
     {
-        public class InfoColumna
+        private class InfoColumna
         {
             public struct DatosCategoria
             {
                 public int TotalEncontrado;
                 public string Nombre;
             }
-            public bool EsClase=false; 
             public int Indice = 1;
             public string NombreColumna;
             public bool EsNumero = false;
@@ -109,150 +108,69 @@ namespace Clasificador_Bayes_Ingenuo
        
 
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
-        public InfoColumna[] DatosColumna;
-        public double SuavisadoLaplacae(int ColumnaClase, List<string[]> input)
+         InfoColumna[] DatosColumna;
+
+        public void DiscretizacionFrencuencias(int intervalo)
         {
 
-            string[,] Aux = { 
-                            {"negro","si","peque~no","alta","+"},
-                            {"amarillo","no","grande","media","-"},
-                            {"amarillo","no","grande","baja","-"},
-                            {"blanco","si","medio","alta","+"},
-                            {"negro","no","medio","alta","-"},
-                            {"rojo","si","peque~no","alta","+"},
-                            {"rojo","si","peque~no","baja","-"},
-                            {"negro","no","medio","media","-"},
-                            {"negro","si","peque~no","media","-"},
-                            {"amarillo","si","grande","media","-"}
-            };
-            TablaValores = Aux;
-            DatosColumna = new InfoColumna[TablaValores.GetLength(1)];
-            Rows = TablaValores.GetLength(0);
-            string[] Cadena = { "color", "alas", "tamañno", "velocidad ", "lepisto" };
-            for (int i = 0; i<=TablaValores.GetUpperBound(1);i++)
-            {
-                DatosColumna[i] = new InfoColumna();
-                DatosColumna[i].Indice = i;
-                DatosColumna[i].NombreColumna = Cadena[i];
-                if(i == (ColumnaClase))
-                {
-                    DatosColumna[i].EsClase = true;
-                }
-            }
-            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
-            {
-                DatosColumna[i].Correr(TablaValores, i);
-              
-            }
-            //Convierte la tabla en una lista de vectores string
-            List<string[]> TablaLista = new List<string[]>();
+            double[] values = { 21, 21, 22, 24, 26, 29, 34, 36, 41, 44, 48, 49, 54, 56, 67, 78 };   
 
-            for (int i = 0; i <= TablaValores.GetUpperBound(0); i++)
-            {
-                string[] Temp = new string[TablaValores.GetLength(1)];
-                for (int j = 0; j <= TablaValores.GetUpperBound(1); j++)
-                {
-                    Temp[j] = TablaValores[i, j];
-                }
-                TablaLista.Add(Temp);
-            }
+            Array.Sort(values);
 
-            int ContarIndicidencia(int indiceSearch, string Categoria, string CategoriaCadena)
-            {
-                int Contar = 0;
-                for (int i = 0; i < TablaLista.Count; i++)
-                {
-
-
-                    //&& TablaLista[i][ColumnaClase] == CategoriaCadena
-                    if (TablaLista[i][indiceSearch] == Categoria)
-                    {
-                        if (TablaLista[i][ColumnaClase] == CategoriaCadena)
-                        {
-                            //MessageBox.Show("Se encontro incidencia" + "\n" + TablaLista[i][indiceSearch] + " | " + TablaLista[i][ColumnaClase]);
-                            Contar++;
-                        }
-
-                    }
-
-                }
-
-
-                return Contar;
-            }
-            //p(+) = 3 / 10
-            //p(Amarillo | +) = (0 + 1) / (3 + 4)
-            //p(no | +) = (0 + 1) / (3 + 2)
-            //p(pequeño | +) = (2 + 1) / (3 + 3)
-            //p(alta | +) = (3 + 1) / (3 + 3)
-
-            //p(-) = 7 / 10
-            //P(Amarillo | -) = (3 + 1) / (7 + 4)
-            //p(no | -) = (4 + 1) / (7 + 2)
-            //p(pequeño | -) = (2 + 1) / (7 + 3)
-            //p(alta | -) = (1 + 1) / (7 + 3)
-
-            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
-            //3 / 10 * (0 + 1) / (3 + 4) * (0 + 1) / (3 + 2) * (2 + 1) / (3 + 3) * (3 + 1) / (3 + 3) = 0.00285714
-
-
-            //P(-) P(Amarillo |-) P(no |-) P(pequeño |-) P(alta |-) = 0.007
-            // 7 / 10 * (3 + 1) / (7 + 4) * (4 + 1) / (7 + 2) * (2 + 1) / (7 + 3) * (1 + 1) / (7 + 3) = 0.00848485
-
-            //empieza laplace
-            //almacena el resultado de cada bayes 
-            double[] Clase = new double [DatosColumna[ColumnaClase].CantidadCategorias];
-            //Ciclo para obtener el 
-            for(int i = 0; i <= Clase.GetUpperBound(0); i++)
-            {
-                double[] AuxiliarBayes = new double[DatosColumna.GetLength(0)];
-                //Nombre de la categoria interesada
-                string Categoria = DatosColumna[ColumnaClase].Categoria[i].Nombre;
-                //Ciclo para sacar el bayes
-                for (int j = 0; j < TablaLista.Count; i++)
-                {
-                   
-                    for(int k = 0; k <= TablaLista[j].GetUpperBound(0);k++)
-                    {
-                        //k Maneja la el indice de la columna
-                        if (k == ColumnaClase)
-                        {
-                            // P =  Categoria / Total de del atributos
-                            AuxiliarBayes[k] = DatosColumna[k].Categoria[i].TotalEncontrado / TablaLista.Count;
-                         
-                        }
-                        else
-                        {
-                            AuxiliarBayes[k] = ContarIndicidencia(k,input[j][k],Categoria)+ 1 / 
-                                DatosColumna[k].Categoria[i].TotalEncontrado + DatosColumna[k].CantidadCategorias ;   
-                        }
-
-                    }
-                }
-
+            int elementos = values.Length;
+            int categorias = intervalo;
+            double rangos = elementos/categorias;
+            int i = 1;
+            int pivote = (int)rangos;
+            double decimals = rangos - Math.Truncate(rangos);
+            string tipo  = "a";
+            string[,] disc = new string[categorias,3];
             
+            //if (decimals < 5)
+            //{
+            //    int pivote = (int)rangos;
+            //    tipo = "bajo";
+            //}
+            //else if (decimals == 5)
+            //{
+            //    int pivote = (int)Math.Round(rangos);
+            //    tipo = "medio";
+            //}
+            //else if (decimals >= 5) {
+            //    int pivote = (int)Math.Round(rangos);
+            //    tipo = "alto";
+            //}
+
+            foreach (double value in values)
+            {
+                if (i == pivote && i<values.Length)
+                {
+                    double valor = (values[pivote] + values[pivote-1])/2;
+
+                    int x = 0;
+                    disc[x, 0] = $"Cat{x+1}";
+                    disc[x, 1] = "wea";
+                    disc[x, 2] = valor.ToString();
+                    MessageBox.Show($"{disc[x, 0]} {disc[x, 1]} {disc[x, 2]}");
+                    pivote += (int)rangos;
+                }
+                i++;
+                
+                //if (tipo == "bajo")
+                //{
+                    
+                //}
+                //else if (tipo == "medio")
+                //{
+
+                //}
+                //else if (tipo == "alto")
+                //{
+
+                //}
             }
-           
-
-           
-
-           MessageBox.Show( ContarIndicidencia(0, "amarillo", "-")+"");
-           // int[] temp = new int[DatosColumna[ColumnaClase].CantidadCategorias];
-           
-           
-            
-
-            
-
-
-            //TODO:
-            //La asignacion de clases puede ser por probabiliada 20% 40% 60% etc y darles rangos deacuerdo a la distribucion
-            //Ciclo para determinar donde se  cumple
-
-
-
-            return 0;
         }
+
 
         private void DeterminarDimensiones(string DirArchivo)
         {
@@ -333,22 +251,8 @@ namespace Clasificador_Bayes_Ingenuo
             reader.Close();
         }
 
-        public void DiscretizacionFrecuencias(string[,] arreglo)
-        {
-
-        }
-
-        public void FuncionDensidad()
-        {
-
-        }
-        
         public double Varianza(double[] values)                  //(x-media) al cuadrado
         {
-            ///<summary>
-            ///<para>line1</para>
-            ///<para>line2</para>
-            ///</summary>
             double avg = Media(values);
             double variance = 0.0;
 
@@ -380,11 +284,6 @@ namespace Clasificador_Bayes_Ingenuo
         {
             return Math.Sqrt(variance);
         }
-
-
-
-
-
 
     }
     
