@@ -72,16 +72,17 @@ namespace Clasificador_Bayes_Ingenuo
                             AuxiliarCategoria.Nombre = tabla[i, Indice];
                             AuxiliarCategoria.TotalEncontrado++;
                             Categoria.Add(AuxiliarCategoria);
-                           MessageBox.Show("Se encontro nueva categoria: " + tabla[i, Indice]);
+                           //MessageBox.Show("Se encontro nueva categoria: " + tabla[i, Indice]);
                         }
 
                         //Limpiar el auxiliar
                         AuxiliarCategoria = new DatosCategoria();
                     }
-                     foreach(var val in Categoria)
-                    {
-                        MessageBox.Show(val.Nombre + " | " + val.TotalEncontrado);
-                    }
+                    
+                    // foreach(var val in Categoria)
+                    //{
+                    //    MessageBox.Show(val.Nombre + " | " + val.TotalEncontrado);
+                    //}
                     CantidadCategorias = Categoria.Count;
 
                 }
@@ -96,7 +97,7 @@ namespace Clasificador_Bayes_Ingenuo
 
         /// arreglo con con los datos recabadadosd e la tabla
         public string[,] TablaValores;
-    
+        public string[] ValoresPrueba;
 
        
         //Dimensiones de la tabla
