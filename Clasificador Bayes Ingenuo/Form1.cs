@@ -45,6 +45,7 @@ namespace Clasificador_Bayes_Ingenuo
             Datos.LeerArchivo(@"C:\tmp\Diabetes.csv",int.Parse(txt_clase.Text));
 
 
+
             MessageBox.Show("a");
                 Form2 settingsForm = new Form2();
                 settingsForm.Show();

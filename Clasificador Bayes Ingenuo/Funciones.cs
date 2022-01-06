@@ -109,64 +109,52 @@ namespace Clasificador_Bayes_Ingenuo
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
          InfoColumna[] DatosColumna;
 
+        //Tabla discretizada
+        public string[,] TablaDiscretizada;
+
         public void DiscretizacionFrencuencias(int intervalo)
         {
 
-            double[] values = { 21, 21, 22, 24, 26, 29, 34, 36, 41, 44, 48, 49, 54, 56, 67, 78 };   
+            double[] values = { 21, 21, 22, 24, 26, 29, 34, 36, 41, 44, 48, 49, 54, 56, 67, 78 };
 
             Array.Sort(values);
 
             int elementos = values.Length;
             int categorias = intervalo;
-            double rangos = elementos/categorias;
-            int i = 1;
+            double rangos = elementos / categorias;
+
             int pivote = (int)rangos;
             double decimals = rangos - Math.Truncate(rangos);
-            string tipo  = "a";
-            string[,] disc = new string[categorias,3];
-            
-            //if (decimals < 5)
-            //{
-            //    int pivote = (int)rangos;
-            //    tipo = "bajo";
-            //}
-            //else if (decimals == 5)
-            //{
-            //    int pivote = (int)Math.Round(rangos);
-            //    tipo = "medio";
-            //}
-            //else if (decimals >= 5) {
-            //    int pivote = (int)Math.Round(rangos);
-            //    tipo = "alto";
-            //}
+            string[,] disc = new string[categorias, 3];
 
+            //Detectar valor de los rangos
+            int x = 0;
+            int i = 1;
             foreach (double value in values)
             {
                 if (i == pivote && i<values.Length)
                 {
                     double valor = (values[pivote] + values[pivote-1])/2;
 
-                    int x = 0;
                     disc[x, 0] = $"Cat{x+1}";
-                    disc[x, 1] = "wea";
+                    disc[x, 1] = "menor que";
                     disc[x, 2] = valor.ToString();
                     MessageBox.Show($"{disc[x, 0]} {disc[x, 1]} {disc[x, 2]}");
                     pivote += (int)rangos;
+                    x++;
                 }
                 i++;
+            }
+            disc[x, 0] = $"Cat{x + 1}";
+            disc[x, 1] = "mayor o igual";
+            disc[x, 2] = disc[x - 1, 2];
+            MessageBox.Show($"{disc[x, 0]} {disc[x, 1]} {disc[x, 2]}");
+
+            TablaDiscretizada = new string[TablaValores.GetUpperBound(0), TablaValores.GetUpperBound(1)];
+            //Discretizacion
+            foreach (double value in values)
+            {
                 
-                //if (tipo == "bajo")
-                //{
-                    
-                //}
-                //else if (tipo == "medio")
-                //{
-
-                //}
-                //else if (tipo == "alto")
-                //{
-
-                //}
             }
         }
 
@@ -192,8 +180,7 @@ namespace Clasificador_Bayes_Ingenuo
                 DatosColumna = new InfoColumna[Columnas];
 
                 //Se crea la tabla y se ommite la primera fila para el tamano de la tabla de datos
-                TablaValores = new string[Fila-1, Columnas];
-           
+                TablaValores = new string[Fila-1, Columnas];             
 
                 for (int i = 0; i < Columnas; i++)
                 {
