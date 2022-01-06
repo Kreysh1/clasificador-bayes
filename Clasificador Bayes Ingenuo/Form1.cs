@@ -42,8 +42,14 @@ namespace Clasificador_Bayes_Ingenuo
                 open.DefaultExt = "csv";
                 open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
 
-            Datos.LeerArchivo(@"C:\tmp\Diabetes.csv",int.Parse(txt_clase.Text));
+           // Datos.LeerArchivo(@"C:\tmp\Diabetes.csv",int.Parse(txt_clase.Text));
+            List<string[]>Pruebas = new List<string[]>();
+            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
 
+
+            string[] temp = { "amarillo", "no", "peque~no", "alta", "" };
+            Pruebas.Add(temp);
+            Datos.SuavisadoLaplacae(4, Pruebas);
 
 
             MessageBox.Show("a");
