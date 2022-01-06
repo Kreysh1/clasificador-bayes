@@ -99,59 +99,80 @@ namespace Clasificador_Bayes_Ingenuo
         /// arreglo con con los datos recabadadosd e la tabla
         public string[,] TablaValores;
         public string[] ValoresPrueba;
-
+        public List<string[]> TablaDiscreta = new List<string[]>();
        
+        void TransFormarArregloALista(string[,] Entrada)
+        {
+            for (int i = 0; i <= Entrada.GetUpperBound(0); i++)
+            {
+                string[] Temp = new string[Entrada.GetLength(1)];
+                for (int j = 0; j <= Entrada.GetUpperBound(1); j++)
+                {
+                    Temp[j] = Entrada[i, j];
+                }
+                TablaDiscreta.Add(Temp);
+            }
+        }
         //Dimensiones de la tabla
         public int Column;
         public int Rows;
 
-        //InfoColumna guarda los datos especificos a una columna
-        public double SuavisadoLaplacae(int ColumnaClase, List<string[]> input)
+        int NumeroRandom(int Rango)
         {
-
-            string[,] Aux = {
-                            {"negro","si","peque~no","alta","+"},
-                            {"amarillo","no","grande","media","-"},
-                            {"amarillo","no","grande","baja","-"},
-                            {"blanco","si","medio","alta","+"},
-                            {"negro","no","medio","alta","-"},
-                            {"rojo","si","peque~no","alta","+"},
-                            {"rojo","si","peque~no","baja","-"},
-                            {"negro","no","medio","media","-"},
-                            {"negro","si","peque~no","media","-"},
-                            {"amarillo","si","grande","media","-"}
-            };
-            TablaValores = Aux;
-            DatosColumna = new InfoColumna[TablaValores.GetLength(1)];
-            Rows = TablaValores.GetLength(0);
-            string[] Cadena = { "color", "alas", "tamañno", "velocidad ", "lepisto" };
-            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
+            Random r = new Random();
+            int rInt = r.Next(0, Rango);
+            return rInt;
+        }
+        void entrenar(int CantidadGenerar, int ColumnaClase)
+        {
+            if (TablaDiscreta.Count < 1)
             {
-                DatosColumna[i] = new InfoColumna();
-                DatosColumna[i].Indice = i;
-                DatosColumna[i].NombreColumna = Cadena[i];
-                if (i == (ColumnaClase))
+                MessageBox.Show("Tabla sin transformar");
+                TransFormarArregloALista(TablaDiscretizada);
+            }
+            for (int i = 0; i < TablaDiscretizada.GetLength(0); i++)
+            {
+             
+                //Se vuelve a obtener los datos del a tabla ya discretizada
+                //esto para hacer bien el vayes
+                DatosColumna[i].Correr(TablaDiscretizada, i);
+
+            }
+            
+            List<string[]> generados = new List<string[]>();
+            //Empieza a generar datos
+           
+            for(int i =0 ; i <= CantidadGenerar; i++)
+            {
+                string[] Temp = new string [TablaDiscreta[1].GetLength(0)];
+                for(int j=0; j<=TablaDiscreta[i].GetLength(0); j++)
                 {
-                    DatosColumna[i].EsClase = true;
+                    if (j != ColumnaClase) { 
+                    //Se obtiene el la cantidad de categorias
+                    int aux = DatosColumna[j].CantidadCategorias;
+                    //Se crea una columna aleatoria con el resultado de una categoria aleatoria por aux(la cantidad de Categorias en la columna)
+                    Temp[j] = DatosColumna[j].Categoria[NumeroRandom(aux)].Nombre;
+                    }                  
                 }
+                generados.Add(Temp);
             }
-            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
-            {
-                DatosColumna[i].Correr(TablaValores, i);
 
+            for(int i=0; i< generados.Count; i++)
+            {
+                generados[i][ColumnaClase] = SuavisadoLaplacae(generados, ColumnaClase);
             }
+
+        }
+
+        //InfoColumna guarda los datos especificos a una columna
+        public string SuavisadoLaplacae(List<string[]> input, int ColumnaClase)
+        {
+            //en el caso de que este vacia
+           
+
             //Convierte la tabla en una lista de vectores string
-            List<string[]> TablaLista = new List<string[]>();
+            List<string[]> TablaLista = TablaDiscreta;
 
-            for (int i = 0; i <= TablaValores.GetUpperBound(0); i++)
-            {
-                string[] Temp = new string[TablaValores.GetLength(1)];
-                for (int j = 0; j <= TablaValores.GetUpperBound(1); j++)
-                {
-                    Temp[j] = TablaValores[i, j];
-                }
-                TablaLista.Add(Temp);
-            }
 
             int ContarIndicidencia(int indiceSearch, string Categoria, string CategoriaCadena)
             {
@@ -176,7 +197,6 @@ namespace Clasificador_Bayes_Ingenuo
 
                 return Contar;
             }
-            MessageBox.Show("Incidencio: " + ContarIndicidencia(0, "amarillo", "-") + "");
             //p(+) = 3 / 10
             //p(Amarillo | +) = (0 + 1) / (3 + 4)
             //p(no | +) = (0 + 1) / (3 + 2)
@@ -289,7 +309,7 @@ namespace Clasificador_Bayes_Ingenuo
 
             MessageBox.Show("Fue :" + DatosColumna[ColumnaClase].Categoria[indice].Nombre );
 
-            return 0;
+            return DatosColumna[ColumnaClase].Categoria[indice].Nombre;
         }
 
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
