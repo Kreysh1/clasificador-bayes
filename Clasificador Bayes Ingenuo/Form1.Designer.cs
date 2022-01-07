@@ -45,16 +45,17 @@ namespace Clasificador_Bayes_Ingenuo
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
-            this.txt_intervalo = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.numUpDown = new System.Windows.Forms.NumericUpDown();
             this.dgvDataset = new System.Windows.Forms.DataGridView();
+            this.txt_intervalo = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -226,14 +227,6 @@ namespace Clasificador_Bayes_Ingenuo
             this.label5.TabIndex = 9;
             this.label5.Text = "Intervalo de discretización:";
             // 
-            // txt_intervalo
-            // 
-            this.txt_intervalo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_intervalo.Location = new System.Drawing.Point(233, 465);
-            this.txt_intervalo.Name = "txt_intervalo";
-            this.txt_intervalo.Size = new System.Drawing.Size(60, 22);
-            this.txt_intervalo.TabIndex = 8;
-            // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -284,17 +277,34 @@ namespace Clasificador_Bayes_Ingenuo
             this.dgvDataset.Size = new System.Drawing.Size(613, 415);
             this.dgvDataset.TabIndex = 14;
             // 
+            // txt_intervalo
+            // 
+            this.txt_intervalo.Location = new System.Drawing.Point(231, 468);
+            this.txt_intervalo.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.txt_intervalo.Name = "txt_intervalo";
+            this.txt_intervalo.Size = new System.Drawing.Size(62, 20);
+            this.txt_intervalo.TabIndex = 15;
+            this.txt_intervalo.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tomato;
             this.ClientSize = new System.Drawing.Size(1215, 543);
+            this.Controls.Add(this.txt_intervalo);
             this.Controls.Add(this.dgvDataset);
             this.Controls.Add(this.numUpDown);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.txt_intervalo);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -311,6 +321,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -334,12 +345,12 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.RadioButton radioButton6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txt_intervalo;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.NumericUpDown numUpDown;
         private System.Windows.Forms.DataGridView dgvDataset;
+        private System.Windows.Forms.NumericUpDown txt_intervalo;
     }
 }
 

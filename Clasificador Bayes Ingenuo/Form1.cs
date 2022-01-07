@@ -31,6 +31,7 @@ namespace Clasificador_Bayes_Ingenuo
                     txt_dataset.Text = openFileDialog1.FileName;
                     Datos.LeerArchivo(txt_dataset.Text);
                     numUpDown.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
+                    txt_intervalo.Maximum = Datos.TablaValores.GetUpperBound(0) + 1;
 
                     dgvDataset.Columns.Clear();
                     dgvDataset.Rows.Clear();
@@ -119,7 +120,7 @@ namespace Clasificador_Bayes_Ingenuo
             //Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text));
             //, int.Parse(numUpDown.Text)
             Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
-            Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
+           // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
 
             List<string[]> Pruebas = new List<string[]>();
             //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
