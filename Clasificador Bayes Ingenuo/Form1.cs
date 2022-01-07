@@ -61,7 +61,6 @@ namespace Clasificador_Bayes_Ingenuo
         }
         private void button1_Click(object sender, EventArgs e)
         {
-
             try
             {
                 // Open File Dialog
@@ -105,7 +104,6 @@ namespace Clasificador_Bayes_Ingenuo
             {
                 MessageBox.Show("Error: al abrir el archivo");
             }
-
 
         }
 

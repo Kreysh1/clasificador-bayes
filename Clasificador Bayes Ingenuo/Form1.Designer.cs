@@ -48,13 +48,13 @@ namespace Clasificador_Bayes_Ingenuo
             this.button2 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.numUpDown = new System.Windows.Forms.NumericUpDown();
+            this.txt_clase = new System.Windows.Forms.NumericUpDown();
             this.dgvDataset = new System.Windows.Forms.DataGridView();
             this.txt_intervalo = new System.Windows.Forms.NumericUpDown();
             this.TablaConfusion = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TablaConfusion)).BeginInit();
@@ -254,18 +254,18 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // numUpDown
+            // txt_clase
             // 
-            this.numUpDown.Location = new System.Drawing.Point(150, 126);
-            this.numUpDown.Minimum = new decimal(new int[] {
+            this.txt_clase.Location = new System.Drawing.Point(150, 126);
+            this.txt_clase.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numUpDown.Name = "numUpDown";
-            this.numUpDown.Size = new System.Drawing.Size(62, 20);
-            this.numUpDown.TabIndex = 13;
-            this.numUpDown.Value = new decimal(new int[] {
+            this.txt_clase.Name = "txt_clase";
+            this.txt_clase.Size = new System.Drawing.Size(62, 20);
+            this.txt_clase.TabIndex = 13;
+            this.txt_clase.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -274,9 +274,9 @@ namespace Clasificador_Bayes_Ingenuo
             // dgvDataset
             // 
             this.dgvDataset.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDataset.Location = new System.Drawing.Point(590, 85);
+            this.dgvDataset.Location = new System.Drawing.Point(590, 25);
             this.dgvDataset.Name = "dgvDataset";
-            this.dgvDataset.Size = new System.Drawing.Size(613, 415);
+            this.dgvDataset.Size = new System.Drawing.Size(613, 208);
             this.dgvDataset.TabIndex = 14;
             // 
             // txt_intervalo
@@ -313,7 +313,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.Controls.Add(this.TablaConfusion);
             this.Controls.Add(this.txt_intervalo);
             this.Controls.Add(this.dgvDataset);
-            this.Controls.Add(this.numUpDown);
+            this.Controls.Add(this.txt_clase);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label5);
@@ -331,7 +331,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TablaConfusion)).EndInit();
@@ -361,7 +361,7 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.NumericUpDown numUpDown;
+        private System.Windows.Forms.NumericUpDown txt_clase;
         private System.Windows.Forms.DataGridView dgvDataset;
         private System.Windows.Forms.NumericUpDown txt_intervalo;
         private System.Windows.Forms.DataGridView TablaConfusion;
