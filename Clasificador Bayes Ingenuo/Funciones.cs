@@ -341,8 +341,23 @@ namespace Clasificador_Bayes_Ingenuo
                     int elementos = sortedValues.Length;
                     int categorias = intervalo;
                     double rangos = (double)elementos / (double)categorias;
-                    rangos = Math.Round(rangos,0);
-                    MessageBox.Show($"Rangos:{rangos.ToString("F2")}Categorias:{categorias.ToString()}");
+                    var entero = (long)rangos;
+                    var decimalPart = rangos - entero;
+
+                    //MessageBox.Show(decimalPart.ToString());
+
+                    //Redondear el valor de los rangos
+                    if (decimalPart >= 0.5)
+                    {
+                        rangos = entero + 1;
+                    }
+                    else
+                    {
+                        rangos = entero; //<== Se puede quitar
+                    }
+
+
+                    //MessageBox.Show($"Rangos:{rangos.ToString("F2")}Categorias:{categorias.ToString()}");
 
                     int pivote = (int)rangos;
                     string[,] disc = new string[categorias, 3];
@@ -374,13 +389,13 @@ namespace Clasificador_Bayes_Ingenuo
                             {
                                 disc[x, 2] = valor.ToString();
                             }
-                            MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                            //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
                             pivote += (int)rangos;
-                            MessageBox.Show($"Pivote:{pivote} sortedLength: {sortedValues.Length}");
+                            //MessageBox.Show($"Pivote:{pivote} sortedLength: {sortedValues.Length}");
                             x++;
                         }
                     }
-                    MessageBox.Show(x.ToString());
+                    //MessageBox.Show(x.ToString());
                     if (x < categorias)
                     {
                         disc[x, 0] = $"Cat{x + 1}";
@@ -404,16 +419,14 @@ namespace Clasificador_Bayes_Ingenuo
                     x = 0;
                     for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
                     {
-                        if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[x, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[x, 2])))
+                        for (int k = 0; k<=disc.GetUpperBound(0); k++)
                         {
-                            TablaDiscretizada[j, i] = disc[x, 0];
-                            MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
-                        }
-                        else if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[x + 1, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[x + 1, 2])))
-                        {
-                            x++;
-                            TablaDiscretizada[j, i] = disc[x, 0];
-                            MessageBox.Show($"{sortedValues[j]} = {TablaDiscretizada[j, i]}");
+                            if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[k, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[k, 2])))
+                            {
+                                TablaDiscretizada[j, i] = disc[k, 0];
+                                MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
+                                break;
+                            }
                         }
                     }
 
@@ -423,7 +436,7 @@ namespace Clasificador_Bayes_Ingenuo
                     // Aca entra cuando los valores de la columna son discretos (osea que los valores son categorias)
                     for (int j = 0; j <= values.GetUpperBound(0); j++)
                     {
-                        MessageBox.Show(values[j, i]);
+                        //MessageBox.Show(values[j, i]);
                         TablaDiscretizada[j, i] = values[j, i];
                     }
                 }
@@ -511,8 +524,8 @@ namespace Clasificador_Bayes_Ingenuo
         public void FuncionDensidad(string [,] values, int clase)
         {
             double[] columna = new double[values.GetUpperBound(0) + 1];
-            double[] calculos = new double[2];   //Aquí se guardara la media y la desviacion estandar de cada columna
-
+            double[,] calculos = new double[2, values.GetUpperBound(1) + 1];   //Aquí se guardara la media y la desviacion estandar de cada columna
+             
             //Carga la columna en un array unidimensional
             for (int i = 0; i <= values.GetUpperBound(0); i++)
             {
@@ -522,11 +535,16 @@ namespace Clasificador_Bayes_Ingenuo
                     columna[i] = Convert.ToDouble(values[j, i]);
                 }  
             }
+
+            double media = GetMedia(columna);
+            double desvEstandar = GetDesviacionEstandar(GetVarianza(columna));
+
+
         }
 
-        public double Varianza(double[] values)                  //(x-media) al cuadrado
+        public double GetVarianza(double[] values)                  //(x-media) al cuadrado
         {
-            double avg = Media(values);
+            double avg = GetMedia(values);
             double variance = 0.0;
 
             foreach (double value in values)
@@ -536,7 +554,7 @@ namespace Clasificador_Bayes_Ingenuo
             }
             return variance;
         }
-        public double Suma(double[] values)     //Suma los valores de la columna
+        public double GetSuma(double[] values)     //Suma los valores de la columna
         {
             double sum = 0;
             for (int i = 0; i < values.Length; i++)
@@ -546,14 +564,14 @@ namespace Clasificador_Bayes_Ingenuo
             return sum;
         }
 
-        public double Media(double[] values) //Promedio
+        public double GetMedia(double[] values) //Promedio
         {
-            double sum = Suma(values);
+            double sum = GetSuma(values);
             double avg = sum / values.Length;
             return avg;
         }
 
-        public double DesviacionEstandar(double variance)        //Raiz cuadrada de la varianza  (DESVEST.P para poblacion)
+        public double GetDesviacionEstandar(double variance)        //Raiz cuadrada de la varianza  (DESVEST.P para poblacion)
         {
             return Math.Sqrt(variance);
         }
