@@ -15,7 +15,6 @@ namespace Clasificador_Bayes_Ingenuo
     public partial class Form1 : Form
     {
         public static Archivo Datos = new Archivo();
-        int Columna;
 
         DataGridView MostrarDataset(string[] Titulos, string[,] Contenido)
         {
@@ -61,8 +60,7 @@ namespace Clasificador_Bayes_Ingenuo
         }
         DataGridView MostrarTablaDeEvaluacion(string[,] Contenido)
         {
-            dgvDataset.Columns.Clear();
-            dgvDataset.Rows.Clear();
+            dvgEvaluacion.Rows.Clear();
             DataGridView Tabla = new DataGridView();
 
             for (int i = 0; i <= Contenido.GetUpperBound(0); i++)
@@ -163,8 +161,8 @@ namespace Clasificador_Bayes_Ingenuo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string[,] DatosPrueba = Datos.DatosPrueba(@"C:\Users\alex_\Desktop\Radeon ReLive\Documentacion\datasets\prueba.txt");
-            Console.WriteLine();
+            //string[,] DatosPrueba = Datos.DatosPrueba(@"C:\Users\alex_\Desktop\Radeon ReLive\Documentacion\datasets\prueba.txt");
+            //Console.WriteLine();
         }
     }
 }
