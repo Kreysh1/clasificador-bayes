@@ -18,7 +18,6 @@ namespace Clasificador_Bayes_Ingenuo
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             try
             {
                 // Open File Dialog
@@ -30,7 +29,7 @@ namespace Clasificador_Bayes_Ingenuo
                 {
                     txt_dataset.Text = openFileDialog1.FileName;
                     Datos.LeerArchivo(txt_dataset.Text);
-                    numUpDown.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
+                    txt_clase.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
                     txt_intervalo.Maximum = Datos.TablaValores.GetUpperBound(0) + 1;
 
                     dgvDataset.Columns.Clear();
@@ -49,8 +48,6 @@ namespace Clasificador_Bayes_Ingenuo
                             dgvDataset.Rows[i].Cells[j].Value = Datos.TablaValores[i,j];
                         }                      
                     }
-                       
-
                 }
             }
             catch (Exception)
@@ -97,7 +94,6 @@ namespace Clasificador_Bayes_Ingenuo
                     {
                         MessageBox.Show("No se selecciono un archivo");
                     }
-
                 }
             }
             else
@@ -110,9 +106,7 @@ namespace Clasificador_Bayes_Ingenuo
         {
             MessageBox.Show(ex.Message);
         }
-
       */
-
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -120,7 +114,8 @@ namespace Clasificador_Bayes_Ingenuo
             //Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text));
             //, int.Parse(numUpDown.Text)
             Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
-           // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
+            Datos.FuncionDensidad(Datos.TablaValores, int.Parse(txt_clase.Text));
+            Datos.MetricasEvaluacion(int.Parse(txt_clase.Text));
 
             List<string[]> Pruebas = new List<string[]>();
             //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0

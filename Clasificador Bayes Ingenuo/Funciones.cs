@@ -391,7 +391,7 @@ namespace Clasificador_Bayes_Ingenuo
                             {
                                 disc[x, 2] = valor.ToString();
                             }
-                            MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                            //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
                             pivote += (int)rangos;
                             //MessageBox.Show($"Pivote:{pivote} sortedLength: {sortedValues.Length}");
                             x++;
@@ -403,10 +403,9 @@ namespace Clasificador_Bayes_Ingenuo
                         disc[x, 0] = $"Cat{x + 1}";
                         disc[x, 1] = disc[x - 1, 2];                                    //MAYOR O IGUAL
                         disc[x, 2] = "99999999999999999999999999999999999999";          //MENOR
-                        MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                        //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
                     }
-
-
+                    
                     ////Discretizacion ==================================
 
                     //Vuelve a cargar los datos de la columna (para que no salgan ordenados)
@@ -426,7 +425,7 @@ namespace Clasificador_Bayes_Ingenuo
                             if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[k, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[k, 2])))
                             {
                                 TablaDiscretizada[j, i] = disc[k, 0];
-                                MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
+                                //MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
                                 break;
                             }
                         }
@@ -493,6 +492,58 @@ namespace Clasificador_Bayes_Ingenuo
             
         }
 
+        //Arrays para las metricas de evaluacion
+        public double[] Precision;
+        public double[] Recall;
+        public double[] F1;
+        public double Accuracy;
+
+        public void MetricasEvaluacion(int clase, int[,] tabla= null)
+        {
+
+            int [,]values = new int[3, 3] 
+            { 
+                {3,3,2},
+                {1,3,2},
+                {2,1,3}
+            };
+            Precision = new double[DatosColumna[clase].CantidadCategorias];
+            Recall = new double[DatosColumna[clase].CantidadCategorias];
+            F1 = new double[DatosColumna[clase].CantidadCategorias];
+            Accuracy = 0;
+
+            for (int i = 0; i <= DatosColumna[clase].CantidadCategorias; i++)
+            {
+                double precisionDiv = 0;
+                double recallDiv = 0;
+
+
+                for (int j = 0; j <= DatosColumna[clase].CantidadCategorias; j++)
+                {
+
+                    precisionDiv += values[i, j];
+
+                    recallDiv += values[j, i];
+
+                    if (i == j)
+                    {
+                        Accuracy += values[i, j];
+
+                    }
+                }
+                
+                Precision[i] = values[i, i] / precisionDiv;
+                Recall[i] = values[i, i] / recallDiv;
+
+                F1[i] = 2 * ((Precision[i] * Recall[i]) / (Precision[i] + Recall[i]));
+
+                //dgvMetricas.Rows.Add(clases.ElementAt(i).Key, precision[i].ToString("0.###"), recall[i].ToString("0.###"), f1[i].ToString("0.###"));
+                MessageBox.Show($"{DatosColumna[clase].Categoria[i].Nombre}|{Precision[i].ToString("0.###")}|{Recall[i].ToString("0.###")}|{F1[i].ToString("0.###")}");
+            }
+
+            Accuracy /= TablaValores.GetUpperBound(0);
+            MessageBox.Show($"{Accuracy.ToString("0.###")}");
+        }
 
         public void LeerArchivo(string DirArchivo)
         {
@@ -521,49 +572,71 @@ namespace Clasificador_Bayes_Ingenuo
             reader.Close();
         }
 
+        public struct Densidad
+        {
+            public double Media;
+            public double DesvEstandar;
+        }
+
+        public Densidad[,] calculosXclase;
+
         public void FuncionDensidad(string [,] values, int clase)
         {
             double[] columna = new double[values.GetUpperBound(0) + 1];
             double[,] calculos = new double[2, values.GetUpperBound(1) + 1];   //Aquí se guardara la media y la desviacion estandar de cada columna
-              
+
             // Obtiene Medias y Desv.Est. de cada columna (sin considerar las clases)
-            for (int i = 0; i <= values.GetUpperBound(1); i++)
-            {
-                if (i != clase - 1)         //Se salta la columna de clase
-                {
-                    //Carga la columna en un array unidimensional
-                    for (int j = 0; j <= values.GetUpperBound(0); j++)
-                    {                             
-                            //MessageBox.Show(values[j, i]);
-                            columna[j] = Convert.ToDouble(values[j, i]);
-                    }
+            //for (int i = 0; i <= values.GetUpperBound(1); i++)
+            //{
+            //    if (i != clase - 1)         //Se salta la columna de clase
+            //    {
+            //        //Carga la columna en un array unidimensional
+            //        for (int j = 0; j <= values.GetUpperBound(0); j++)
+            //        {                             
+            //                //MessageBox.Show(values[j, i]);
+            //                columna[j] = Convert.ToDouble(values[j, i]);
+            //        }
 
-                    calculos[0, i] = GetMedia(columna); ;                                   // Media de cada columna
-                    calculos[1, i] = GetDesviacionEstandar(GetVarianza(columna)); ;         // Desviacion estandar de cada columna
+            //        calculos[0, i] = GetMedia(columna); ;                                   // Media de cada columna
+            //        calculos[1, i] = GetDesviacionEstandar(GetVarianza(columna)); ;         // Desviacion estandar de cada columna
 
-                    //MessageBox.Show($"Media:{calculos[0, i]} Desv.Estandar:{calculos[1, i]}");
-                }
-            }
+            //        //MessageBox.Show($"Media:{calculos[0, i]} Desv.Estandar:{calculos[1, i]}");
+            //    }
+            //}
 
             // Obtiene Medias y Desv.Est. de cada columna (considerando las clases)
             // EJ. Existen las clases "Hombre/Mujer", de la columna se calculan los que
             // pertenecen a Hombre y despues los que pertenecen a mujer
+            
+            calculosXclase = new Densidad[DatosColumna[clase - 1].CantidadCategorias, values.GetUpperBound(1)+1];
+            //MessageBox.Show($"renglones:{DatosColumna[clase - 1].CantidadCategorias} cols: {values.GetUpperBound(1)}");
             for (int i = 0; i <= values.GetUpperBound(1); i++)
             {
                 if (i != clase - 1)         //Se salta la columna de clase
                 {
-                    foreach (var x in DatosColumna[clase - 1].Categoria)    // Por cada clase en la columna de clases
+                    for (int j = 0; j <= DatosColumna[clase - 1].CantidadCategorias -1; j++)  // Por cada clase en la columna de clases
                     {
-                        //double[,] calculosXclase = new double[2, ];    //
-                        //Carga la columna en un array unidimensional
-                        for (int j = 0; j <= values.GetUpperBound(0); j++)
+                        double[] otracolumna = new double [DatosColumna[clase - 1].Categoria[j].TotalEncontrado];
+
+                        //Carga la columna tomando unicamente los valores de la clase actual
+                        int pos = 0;
+                        for (int k = 0; k <= values.GetUpperBound(0); k++)
                         {
-                            if (values[j, 0] == x.Nombre)
+                            if (values[k, clase-1] == DatosColumna[clase - 1].Categoria[j].Nombre)
                             {
-                                //MessageBox.Show(values[j, i]);
-                                columna[j] = Convert.ToDouble(values[j, i]);
+                                //MessageBox.Show(values[k, i]);
+                                otracolumna[pos] = Convert.ToDouble(values[k, i]);
+                                pos++;
                             }
+                            
                         }
+
+                        //media
+                        calculosXclase[j, i].Media = GetMedia(otracolumna);
+                        //desviacion estandar
+                        calculosXclase[j, i].DesvEstandar = GetDesviacionEstandar(GetVarianza(otracolumna));
+
+                        //MessageBox.Show($"{DatosColumna[clase - 1].Categoria[j].Nombre} | Media:{calculosXclase[j, i].Media} | Desv.Est:{calculosXclase[j, i].DesvEstandar}");
                     }
                 }
             }
