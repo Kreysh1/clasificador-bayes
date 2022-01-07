@@ -426,7 +426,7 @@ namespace Clasificador_Bayes_Ingenuo
                             if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[k, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[k, 2])))
                             {
                                 TablaDiscretizada[j, i] = disc[k, 0];
-                                MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
+                                //MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
                                 break;
                             }
                         }
@@ -500,7 +500,6 @@ namespace Clasificador_Bayes_Ingenuo
             DeterminarDimensiones(DirArchivo);
             StreamReader reader = new StreamReader(File.OpenRead(DirArchivo));
            
-     
             int FilaActual = 0;
             TablaTitulos = reader.ReadLine().Split(',');//Se salta los nombres de columnas
             //Se puebla el array con datos
@@ -522,25 +521,34 @@ namespace Clasificador_Bayes_Ingenuo
             reader.Close();
         }
 
-
         public void FuncionDensidad(string [,] values, int clase)
         {
             double[] columna = new double[values.GetUpperBound(0) + 1];
             double[,] calculos = new double[2, values.GetUpperBound(1) + 1];   //Aquí se guardara la media y la desviacion estandar de cada columna
              
-            //Carga la columna en un array unidimensional
-            for (int i = 0; i <= values.GetUpperBound(0); i++)
+            
+            // Obtiene Medias y Desv.Est. de cada columna (sin considerar las clases)
+            for (int i = 0; i <= values.GetUpperBound(1); i++)
             {
-                for (int j = 0; j <= values.GetUpperBound(0); j++)
+                if (i != clase - 1)         //Se salta la columna de clase
                 {
-                    //MessageBox.Show(values[j, i]);
-                    columna[i] = Convert.ToDouble(values[j, i]);
-                }  
+                    //Carga la columna en un array unidimensional
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {                             
+                            //MessageBox.Show(values[j, i]);
+                            columna[j] = Convert.ToDouble(values[j, i]);
+                    }
+
+                    calculos[0, i] = GetMedia(columna); ;                                   // Media de cada columna
+                    calculos[1, i] = GetDesviacionEstandar(GetVarianza(columna)); ;         // Desviacion estandar de cada columna
+
+                    MessageBox.Show($"Media:{calculos[0, i]} Desv.Estandar:{calculos[1, i]}");
+                }
             }
 
-            double media = GetMedia(columna);
-            double desvEstandar = GetDesviacionEstandar(GetVarianza(columna));
-
+            // Obtiene Medias y Desv.Est. de cada columna (considerando las clases)
+            // EJ. Existen las clases "Hombre/Mujer", de la columna se calculan los que
+            // pertenecen a Hombre y despues los que pertenecen a mujer
 
         }
 
@@ -549,11 +557,13 @@ namespace Clasificador_Bayes_Ingenuo
             double avg = GetMedia(values);
             double variance = 0.0;
 
-            foreach (double value in values)
+            for (int i = 0; i < values.Length; i++)
             {
                 // Math.Pow => Devuelve un número especificado elevado a la potencia especificada.
-                variance += Math.Pow(value - avg, 2.0);
+                variance += Math.Pow(values[i] - avg, 2.0);
             }
+            variance = variance / values.Length;
+            //MessageBox.Show($"Varianza: {variance.ToString()}");
             return variance;
         }
         public double GetSuma(double[] values)     //Suma los valores de la columna
@@ -562,7 +572,9 @@ namespace Clasificador_Bayes_Ingenuo
             for (int i = 0; i < values.Length; i++)
             {
                 sum += values[i];
+                //MessageBox.Show($"valor: {values[i].ToString()}");
             }
+            //MessageBox.Show($"Suma: {sum.ToString()}");
             return sum;
         }
 
