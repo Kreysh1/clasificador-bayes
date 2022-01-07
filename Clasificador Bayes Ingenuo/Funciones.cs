@@ -162,7 +162,7 @@ namespace Clasificador_Bayes_Ingenuo
         }
         
 
-        private string[,] CambiarValoresPrueba(string[,] matrizDatos, int colClase, List<DatosCategoria> ListaClases, int[] infoCatColumna, int categorias, string entrenamiento)
+        private string[,] CambiarValoresPrueba(string[,] matrizDatos, int colClase, List<DatosCategoria> ListaClases,  int categorias, string entrenamiento)
         {
 
             //Se conviete a un diccionario para agilizar ciertas acciones
