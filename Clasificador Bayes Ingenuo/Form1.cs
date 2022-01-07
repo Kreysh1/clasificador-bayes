@@ -131,6 +131,7 @@ namespace Clasificador_Bayes_Ingenuo
             Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
             MostrarDataset(Datos.TablaTitulos,Datos.TablaDiscretizada);
 
+            Datos.FuncionDensidad(Datos.TablaValores, int.Parse(txt_clase.Text));
             // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
 
             string[,]ArregloValidacion=Datos.Validar(Datos.TablaDiscretizada,Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
