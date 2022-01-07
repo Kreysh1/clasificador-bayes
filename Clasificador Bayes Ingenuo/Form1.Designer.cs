@@ -35,7 +35,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txt_Entrenamiento = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -51,11 +51,13 @@ namespace Clasificador_Bayes_Ingenuo
             this.txt_clase = new System.Windows.Forms.NumericUpDown();
             this.dgvDataset = new System.Windows.Forms.DataGridView();
             this.txt_intervalo = new System.Windows.Forms.NumericUpDown();
+            this.TablaConfusion = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaConfusion)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -109,7 +111,7 @@ namespace Clasificador_Bayes_Ingenuo
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Tomato;
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.txt_Entrenamiento);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.radioButton3);
             this.groupBox1.Controls.Add(this.radioButton2);
@@ -121,13 +123,13 @@ namespace Clasificador_Bayes_Ingenuo
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             // 
-            // textBox1
+            // txt_Entrenamiento
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(385, 68);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(60, 22);
-            this.textBox1.TabIndex = 7;
+            this.txt_Entrenamiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_Entrenamiento.Location = new System.Drawing.Point(385, 68);
+            this.txt_Entrenamiento.Name = "txt_Entrenamiento";
+            this.txt_Entrenamiento.Size = new System.Drawing.Size(60, 22);
+            this.txt_Entrenamiento.TabIndex = 7;
             // 
             // label4
             // 
@@ -294,12 +296,21 @@ namespace Clasificador_Bayes_Ingenuo
             0,
             0});
             // 
+            // TablaConfusion
+            // 
+            this.TablaConfusion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.TablaConfusion.Location = new System.Drawing.Point(590, 518);
+            this.TablaConfusion.Name = "TablaConfusion";
+            this.TablaConfusion.Size = new System.Drawing.Size(613, 178);
+            this.TablaConfusion.TabIndex = 16;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tomato;
-            this.ClientSize = new System.Drawing.Size(1215, 543);
+            this.ClientSize = new System.Drawing.Size(1215, 923);
+            this.Controls.Add(this.TablaConfusion);
             this.Controls.Add(this.txt_intervalo);
             this.Controls.Add(this.dgvDataset);
             this.Controls.Add(this.txt_clase);
@@ -322,6 +333,7 @@ namespace Clasificador_Bayes_Ingenuo
             ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TablaConfusion)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -335,7 +347,7 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txt_Entrenamiento;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton2;
@@ -351,6 +363,7 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.NumericUpDown txt_clase;
         private System.Windows.Forms.DataGridView dgvDataset;
         private System.Windows.Forms.NumericUpDown txt_intervalo;
+        private System.Windows.Forms.DataGridView TablaConfusion;
     }
 }
 

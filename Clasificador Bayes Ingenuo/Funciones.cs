@@ -132,15 +132,52 @@ namespace Clasificador_Bayes_Ingenuo
             DatosColumnasDiscretisar = new InfoColumna[TablaDiscretizada.GetLongLength(1)];
             for (int i = 0; i <= TablaDiscretizada.GetUpperBound(1); i++)
             {
-                DatosColumna[i].Correr(TablaValores, i);
+                DatosColumnasDiscretisar[i] = new InfoColumna();    
+                DatosColumnasDiscretisar[i].Correr(TablaDiscretizada, i);
             }
         }
+        public double[,] CrearMatrizDeConfusion(string[,] TablaDiscreta, string[,] TablaReal, List<DatosCategoria> ListaClases, int colClase)
+        {
+            //Se crea un diccionaria de claes para facilizar ciertas acciones
+            Dictionary<string, double> DiccionarioDeClases = new Dictionary<string, double>();
+            for (int i = 0; i < ListaClases.Count; i++)
+            {
+                DiccionarioDeClases.Add(ListaClases[i].Nombre, ListaClases[i].TotalEncontrado);
+                DiccionarioDeClases[ListaClases[i].Nombre] = 1;
+            }
 
+   
+            
+
+            double[,] matrizConfusion = new double[DiccionarioDeClases.Count, DiccionarioDeClases.Count];
+
+            for (int i = 0; i < TablaDiscreta.GetLength(0); i++)
+            {
+
+                if (TablaDiscreta[i, colClase].Equals(TablaReal[i, colClase]) || TablaDiscreta[i, colClase] != TablaReal[i, colClase])
+                {
+
+                    //MessageBox.Show($"Valor en matrizDatos: {matrizDatos[i, colClase]}, Valor en matrizReal: {matrizReal[i, colClase]}", "Matriz Confusion");
+
+                    int indice1 = DiccionarioDeClases.Keys.ToList().IndexOf(TablaDiscreta[i, colClase]);
+                    int indice2 = DiccionarioDeClases.Keys.ToList().IndexOf(TablaReal[i, colClase]);
+
+                    matrizConfusion[indice1, indice2] += 1;
+                    //MessageBox.Show($"El valor de la posicion {indice1}, {indice2} es {matrizConfusion[indice1, indice2]}", "Matriz Confusion");
+                    //MessageBox.Show($"", "Matriz Confusion");
+
+                }
+
+            }
+
+            return matrizConfusion;
+
+        }
 
         ///Categorias es es la cantidad de categorias por dicretisacion
         ///Entrenamiento es la cadena que representa el porcentaje
         ///Lista de claes es la lista de las categorias de del la columna clase
-        public string[,] CambiarValoresPrueba(string[,] Tabla, int ColumnaClase, List<DatosCategoria> ListaClases,  int categorias, string entrenamiento)
+        public string[,] Validar(string[,] Tabla, int ColumnaClase, List<DatosCategoria> ListaClases,  int categorias, string entrenamiento)
         {
 
             //Se conviete a un diccionario para agilizar ciertas acciones
@@ -315,8 +352,8 @@ namespace Clasificador_Bayes_Ingenuo
         //InfoColumna guarda los datos especificos a una columna
         
         //Guarda el nombre de la columna bajo el mismo indice de la tabla
-        InfoColumna[] DatosColumna;
-        InfoColumna[] DatosColumnasDiscretisar;
+        public InfoColumna[] DatosColumna;
+        public InfoColumna[] DatosColumnasDiscretisar;
 
         //Tabla discretizada
         public string[,] TablaDiscretizada;
@@ -475,6 +512,7 @@ namespace Clasificador_Bayes_Ingenuo
                     DatosColumna[i] = new InfoColumna();
                     DatosColumna[i].Indice = i;
                     DatosColumna[i].NombreColumna = values[i];
+                    TablaTitulos[i] = values[i];
                 }
        
                 Column = Columnas;
@@ -550,9 +588,8 @@ namespace Clasificador_Bayes_Ingenuo
             //Se dimensiona el array para guardar los datos
             DeterminarDimensiones(DirArchivo);
             StreamReader reader = new StreamReader(File.OpenRead(DirArchivo));
-           
             int FilaActual = 0;
-            TablaTitulos = reader.ReadLine().Split(',');//Se salta los nombres de columnas
+            reader.ReadLine();//Se salta los nombres de columnas
             //Se puebla el array con datos
             while (!reader.EndOfStream)
             {
@@ -570,6 +607,24 @@ namespace Clasificador_Bayes_Ingenuo
             }
 
             reader.Close();
+        }
+        //Genera una matriz de confususion a partir de la tabla Discreta y la tabla real
+        public double[,] GenerarMatrizConfusion(string[,] TablaDiscreta, string[,] TablaReal,int ColumnaClase, Dictionary<string, double> clases)
+        {
+            double[,] MatrizDeConfucion = new double[clases.Count, clases.Count];
+            for (int i = 0; i < TablaDiscreta.GetLength(0); i++)
+            {
+
+                if (TablaDiscreta[i, ColumnaClase].Equals(TablaReal[i, ColumnaClase]) || TablaDiscreta[i, ColumnaClase] != TablaReal[i, ColumnaClase])
+                {
+                    int indice1 = clases.Keys.ToList().IndexOf(TablaDiscreta[i, ColumnaClase]);
+                    int indice2 = clases.Keys.ToList().IndexOf(TablaReal[i, ColumnaClase]);
+
+                    MatrizDeConfucion[indice1, indice2] += 1;
+
+                }
+            }
+            return MatrizDeConfucion;
         }
 
         public struct Densidad
