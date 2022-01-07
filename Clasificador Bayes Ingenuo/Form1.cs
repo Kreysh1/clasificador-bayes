@@ -15,7 +15,50 @@ namespace Clasificador_Bayes_Ingenuo
     public partial class Form1 : Form
     {
         public static Archivo Datos = new Archivo();
+        int Columna;
 
+        DataGridView MostrarDataset(string[] Titulos, string[,] Contenido)
+        {
+            dgvDataset.Columns.Clear();
+            dgvDataset.Rows.Clear();
+            DataGridView Tabla = new DataGridView();
+            for (int i = 0; i <= Contenido.GetUpperBound(1); i++)
+            {
+                dgvDataset.Columns.Add($"Columna{i}", Titulos[i].ToString());
+            }
+
+            for (int i = 0; i <= Contenido.GetUpperBound(0); i++)
+            {
+                dgvDataset.Rows.Add();
+                for (int j = 0; j <= Contenido.GetUpperBound(1); j++)
+                {
+                    dgvDataset.Rows[i].Cells[j].Value = Contenido[i, j];
+                }
+            }
+
+            return Tabla;
+        }
+        DataGridView MostrarTablaDeConfucion(string[] Titulos, string[,] Contenido)
+        {
+            TablaConfusion.Columns.Clear();
+            TablaConfusion.Rows.Clear();
+            DataGridView Tabla = new DataGridView();
+            for (int i = 0; i <= Contenido.GetUpperBound(1); i++)
+            {
+                TablaConfusion.Columns.Add($"Columna{i}", Titulos[i].ToString());
+            }
+
+            for (int i = 0; i <= Contenido.GetUpperBound(0); i++)
+            {
+                TablaConfusion.Rows.Add();
+                for (int j = 0; j <= Contenido.GetUpperBound(1); j++)
+                {
+                    TablaConfusion.Rows[i].Cells[j].Value = Contenido[i, j];
+                }
+            }
+
+            return Tabla;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -29,26 +72,31 @@ namespace Clasificador_Bayes_Ingenuo
                 if (File.Exists(openFileDialog1.FileName))
                 {
                     txt_dataset.Text = openFileDialog1.FileName;
+
+                   
                     Datos.LeerArchivo(txt_dataset.Text);
+                    
                     numUpDown.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
                     txt_intervalo.Maximum = Datos.TablaValores.GetUpperBound(0) + 1;
 
                     dgvDataset.Columns.Clear();
                     dgvDataset.Rows.Clear();
+                   
+                    MostrarDataset(Datos.TablaTitulos, Datos.TablaValores);
+                    //for (int i = 0; i <= Datos.TablaValores.GetUpperBound(1); i++)
+                    //{
+                    //    dgvDataset.Columns.Add($"Columna{i}", Datos.TablaTitulos[i].ToString());
+                    //    MessageBox.Show("Titulo");
+                    //}
 
-                    for (int i = 0; i <= Datos.TablaValores.GetUpperBound(1); i++)
-                    {
-                        dgvDataset.Columns.Add($"Columna{i}", Datos.TablaTitulos[i].ToString());  
-                    }
-
-                    for (int i = 0; i <= Datos.TablaValores.GetUpperBound(0); i++)
-                    {
-                        dgvDataset.Rows.Add();
-                        for (int j = 0; j <= Datos.TablaValores.GetUpperBound(1); j++)
-                        {
-                            dgvDataset.Rows[i].Cells[j].Value = Datos.TablaValores[i,j];
-                        }                      
-                    }
+                    //for (int i = 0; i <= Datos.TablaValores.GetUpperBound(0); i++)
+                    //{
+                    //    dgvDataset.Rows.Add();
+                    //    for (int j = 0; j <= Datos.TablaValores.GetUpperBound(1); j++)
+                    //    {
+                    //        dgvDataset.Rows[i].Cells[j].Value = Datos.TablaValores[i,j];
+                    //    }                      
+                    //}
                        
 
                 }
@@ -58,60 +106,6 @@ namespace Clasificador_Bayes_Ingenuo
                 MessageBox.Show("Error: al abrir el archivo");
             }
 
-            //Crea el dialogo para escoger el archivo
-            //OpenFileDialog open = new OpenFileDialog();
-            //open.CheckFileExists = true;
-            //open.CheckPathExists = true;
-            //open.InitialDirectory = @"C:\";
-            //open.Title = "Seleccione un dataset";
-            //open.DefaultExt = "csv";
-            //open.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
-            /*
-          Si el txt no esta vacio y es un numero
-            if (txt_clase.Text != "" && int.TryParse(txt_clase.Text,out _))
-            {
-                Si el recuadro no esta vacio se abre con la direccion puesta
-                if (txt_dataset.Text != "")
-                {
-
-                    Archivo.LeerArchivo(txt_dataset.Text , Convert.ToInt32(txt_clase.Text));
-
-                    MessageBox.Show("");
-                    Form2 settingsForm = new Form2();
-                    settingsForm.Show();
-                }
-                else
-                {
-                    Si el recuadro se abre se abre el la interfaz para
-                    if (open.ShowDialog() == DialogResult.OK)
-                    {
-                        Archivo.LeerArchivo(open.FileName, Convert.ToInt32(txt_clase.Text));
-                        for(int i=0; i < Archivo.Column; i++)
-                        {
-                            MessageBox.Show("");
-                        }
-                        Form2 settingsForm = new Form2();
-                        settingsForm.Show();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se selecciono un archivo");
-                    }
-
-                }
-            }
-            else
-            {
-                MessageBox.Show("Indique la columna de clase");
-            }
-
-        }
-        catch(Exception ex)
-        {
-            MessageBox.Show(ex.Message);
-        }
-
-      */
 
         }
 
@@ -119,10 +113,20 @@ namespace Clasificador_Bayes_Ingenuo
         {
             //Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text));
             //, int.Parse(numUpDown.Text)
-            Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
-           // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
+            Datos.ClaseIndex =int.Parse(numUpDown.Text) -1;
 
+            Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
+            MostrarDataset(Datos.TablaTitulos,Datos.TablaDiscretizada);
+
+            // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
+
+            string[,]ArregloValidacion=Datos.Validar(Datos.TablaDiscretizada,Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
+
+            double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, Datos.TablaValores, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
+            
+            
             List<string[]> Pruebas = new List<string[]>();
+
             //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
 
 
@@ -130,8 +134,8 @@ namespace Clasificador_Bayes_Ingenuo
             //Pruebas.Add(temp);
             //Datos.SuavisadoLaplacae(Pruebas, 4);
 
-            Form2 settingsForm = new Form2();
-            settingsForm.Show();
+            //Form2 settingsForm = new Form2();
+            //settingsForm.Show();
         }
         public Form1()
         {
