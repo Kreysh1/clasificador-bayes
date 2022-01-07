@@ -127,6 +127,7 @@ namespace Clasificador_Bayes_Ingenuo
             
             List<string[]> Pruebas = new List<string[]>();
 
+          
             //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
 
 
@@ -140,6 +141,12 @@ namespace Clasificador_Bayes_Ingenuo
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            string[,] DatosPrueba = Datos.DatosPrueba(@"C:\Users\alex_\Desktop\Radeon ReLive\Documentacion\datasets\prueba.txt");
+            Console.WriteLine();
         }
     }
 }

@@ -661,5 +661,41 @@ namespace Clasificador_Bayes_Ingenuo
         {
             return Math.Sqrt(variance);
         }
+       public string[,] DatosPrueba(string DirArchivo) 
+        {
+            List<string[]> Prueba=new List<string[]>();
+            
+            try
+            {
+                StreamReader reader = new StreamReader(File.OpenRead(DirArchivo));
+                //Se puebla el array con datos
+                while (!reader.EndOfStream)
+                {
+                    string[] DatosFila = reader.ReadLine().Split(',');
+                    Prueba.Add(DatosFila);
+                }
+                reader.Close();
+
+              string[,] Datos= new string[Prueba.Count,Prueba[0].GetLength(0)];
+                for (int i = 0; i <Prueba.Count; i++)
+                {
+                   for(int j = 0; j<Prueba[i].GetLength(0); j++)
+                    {
+                        Datos[i,j]= Prueba[i][j];
+                    }
+                }
+                return Datos;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
+
+
+            return null;
+        }
     }
+
 }
