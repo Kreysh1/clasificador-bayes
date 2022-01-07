@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-
+using System.Linq;
 namespace Clasificador_Bayes_Ingenuo
 {
     public class Archivo
@@ -23,8 +23,9 @@ namespace Clasificador_Bayes_Ingenuo
             public int CantidadCategorias = 0;
             public List<DatosCategoria> Categoria= new List<DatosCategoria>();
 
-            public int TotalDeDatos = 0;
-            
+            //Datos de desnsidad
+            public double Media =0; 
+            public double DesvacionEstandar = 0;
             //Se pasa la tabla i el indice que al que sacar info
 
             public void Correr(string[,] tabla, int Indice)
@@ -46,6 +47,7 @@ namespace Clasificador_Bayes_Ingenuo
                 EsNumero = double.TryParse(tabla[1, Indice], out _);
                 if (EsNumero)
                 {
+                    //En caso de que sea un numero se hace lo siguiente
 
                 }
                 else
@@ -132,14 +134,7 @@ namespace Clasificador_Bayes_Ingenuo
                 MessageBox.Show("Tabla sin transformar");
                 TransFormarArregloALista(TablaDiscretizada);
             }
-            for (int i = 0; i < TablaDiscretizada.GetLength(0); i++)
-            {
-             
-                //Se vuelve a obtener los datos del a tabla ya discretizada
-                //esto para hacer bien el vayes
-                DatosColumna[i].Correr(TablaDiscretizada, i);
-
-            }
+            
             
             List<string[]> generados = new List<string[]>();
             //Empieza a generar datos
@@ -171,16 +166,27 @@ namespace Clasificador_Bayes_Ingenuo
         {
 
             //Se conviete a un diccionario para agilizar ciertas acciones
-            Dictionary<String, double> clases = new Dictionary<String, double>();
+            Dictionary<string, double> clases = new Dictionary<string, double>();
 
             for (int i = 0; i < ListaClases.Count; i++)
             {
                 clases.Add(ListaClases[i].Nombre, ListaClases[i].TotalEncontrado);
                 clases[ListaClases[i].Nombre] = 1;
             }
+
+            //Se cuentan los datos relacionados a la tabla (Nombre, N cantidad de categorias y sus categorias Etc)
+           int[] infoCatColumna= new int[matrizDatos.GetLength(1)];
+            for (int i = 0; i < matrizDatos.GetLength(1); i++)
+            {
+
+                //Se vuelve a obtener los datos del a tabla ya discretizada
+                //esto para hacer bien el vayes
+                DatosColumna[i].Correr(matrizDatos, i);
+
+            }
+           
             int renglonesMatriz = matrizDatos.GetLength(0);
             int columnasMatriz = matrizDatos.GetLength(1);
-
            
             double porcentajeEnt = Double.Parse(entrenamiento) / 100;   // Porcentaje de entrenamiento proporcionado por el usuario que indica cuantos datos serán de prueba
 
@@ -197,13 +203,7 @@ namespace Clasificador_Bayes_Ingenuo
             // Tabla que primero almacenará los contadores de cada atributo y clase, y luego almacenará las probabilidades
             double[,] tablaProbs = new double[columnasMatriz, clases.Count];
 
-            //progresoBarra.Maximum = renglonesMatriz;
-
-            //progresoBarra.Value = 0;
-            //progresoBarra.Value += 1;
-
             // Se inicializa la tabla con los valores de k
-            string Conta = "";
 
             for (int i = indiceFinEnt; i < renglonesMatriz; i++)    // Este for comienza en el indice desde donde se deben hacer las pruebas
             {
@@ -671,9 +671,9 @@ namespace Clasificador_Bayes_Ingenuo
 
                 FilaActual++;
             }
-            for(int i = 0; i <= TablaValores.GetUpperBound(1);i++)
+            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
             {
-                DatosColumna[i].Correr(TablaValores,i);
+                DatosColumna[i].Correr(TablaValores, i);
             }
 
             reader.Close();
