@@ -205,13 +205,13 @@ namespace Clasificador_Bayes_Ingenuo
             else
             {
                 DatosPrueba = Datos.DatosPrueba(txt_rutaprueba.Text);
-                string[,] DatosDiscretosPrueba = Datos.DiscretizarPruebas(int.Parse(txt_intervalo.Text), DatosPrueba);
+                //string[,] DatosDiscretosPrueba = Datos.DiscretizarPruebas(int.Parse(txt_intervalo.Text), DatosPrueba);
                 if (DatosPrueba.GetLength(1) != Datos.TablaValores.GetLength(1))
                 {
                     MessageBox.Show("Datos de prueba no coinciden con la cantidad de columnas ");
                 }
 
-                string [,] aux=Datos.SuavisadoLaplacae(DatosDiscretosPrueba, Datos.ClaseIndex);
+                string [,] aux=Datos.SuavisadoLaplacae(DatosPrueba, Datos.ClaseIndex);
                 MostrarDensidad(Datos.TablaTitulos,aux);
                 
 

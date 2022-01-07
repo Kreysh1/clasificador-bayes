@@ -1064,7 +1064,9 @@ namespace Clasificador_Bayes_Ingenuo
                    
                     double[] Resul = MayorDeArreglo(Clase);
                         int indice = ((int)Resul[1]);
-                input[indice][ColumnaClase] = DatosColumna[ColumnaClase].Categoria[indice].Nombre;
+                
+                input[x][ColumnaClase] = DatosColumna[ColumnaClase].Categoria[indice].Nombre;
+                Console.WriteLine();
                 //MessageBox.Show("Fue :" + DatosColumna[ColumnaClase].Categoria[indice].Nombre);
             }
 
