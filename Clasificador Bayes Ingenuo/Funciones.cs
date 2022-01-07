@@ -891,18 +891,7 @@ namespace Clasificador_Bayes_Ingenuo
 
                 return Contar;
             }
-            //p(+) = 3 / 10
-            //p(Amarillo | +) = (0 + 1) / (3 + 4)
-            //p(no | +) = (0 + 1) / (3 + 2)
-            //p(pequeño | +) = (2 + 1) / (3 + 3)
-            //p(alta | +) = (3 + 1) / (3 + 3)
-
-            //p(-) = 7 / 10
-            //P(Amarillo | -) = (3 + 1) / (7 + 4)
-            //p(no | -) = (4 + 1) / (7 + 2)
-            //p(pequeño | -) = (2 + 1) / (7 + 3)
-            //p(alta | -) = (1 + 1) / (7 + 3)
-
+      
             //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
             //3 / 10 * (0 + 1) / (3 + 4) * (0 + 1) / (3 + 2) * (2 + 1) / (3 + 3) * (3 + 1) / (3 + 3) = 0.00285714
 
@@ -911,8 +900,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 7 / 10 * (3 + 1) / (7 + 4) * (4 + 1) / (7 + 2) * (2 + 1) / (7 + 3) * (1 + 1) / (7 + 3) = 0.00848485
 
             //empieza laplace
-            //almacena el resultado de cada bayes 
-            double[] Clase = new double[DatosColumna[ColumnaClase].CantidadCategorias];
+           
             //Ciclo para obtener el 
             double bayesSuave(string[] Entrada, int IndiceClase)
             {
@@ -969,6 +957,8 @@ namespace Clasificador_Bayes_Ingenuo
                 //MessageBox.Show("Resul " + Resultado);
                 return Resultado;
             }
+            //almacena el resultado de cada bayes 
+            double[] Clase = new double[DatosColumna[ColumnaClase].CantidadCategorias];
 
             double[] MayorDeArreglo(double[] Arreglo)
             {
@@ -989,9 +979,9 @@ namespace Clasificador_Bayes_Ingenuo
             }
             //Se calcula el valor para cada clase
             //Se asigna el resultado a cada elemento de la lista 
-            for (int x = 0; x< input.Count;x++) { 
-                    for (int i = 0; i < input.Count; i++)
-                    {
+            for (int i = 0; i< input.Count;i++) { 
+                  
+                    
                         for (int j = 0; j <= Clase.GetUpperBound(0); j++)
                         {
                             //Se guarda el resultado de cada bayes
@@ -999,14 +989,14 @@ namespace Clasificador_Bayes_Ingenuo
                    
                            // MessageBox.Show("Clase: " + Clase[j] + "\n Indice: " + j + " " + DatosColumna[ColumnaClase].Categoria[j].Nombre);
                         }
-                    }
+                    
                     // input[i][j] =
                     //Se determina a cual clase pertenece
                    
                     double[] Resul = MayorDeArreglo(Clase);
                         int indice = ((int)Resul[1]);
                 
-                input[x][ColumnaClase] = DatosColumna[ColumnaClase].Categoria[indice].Nombre;
+                input[i][ColumnaClase] = DatosColumna[ColumnaClase].Categoria[indice].Nombre;
                 Console.WriteLine();
                 //MessageBox.Show("Fue :" + DatosColumna[ColumnaClase].Categoria[indice].Nombre);
             }
