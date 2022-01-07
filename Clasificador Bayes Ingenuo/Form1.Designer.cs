@@ -381,7 +381,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tomato;
-            this.ClientSize = new System.Drawing.Size(1215, 895);
+            this.ClientSize = new System.Drawing.Size(1215, 930);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.DatasetDensidad);
             this.Controls.Add(this.txt_accuracy);

@@ -37,12 +37,8 @@ namespace Clasificador_Bayes_Ingenuo
                 //TablaConfusion.Rows[i].Cells[0].Value = Clases[i].Nombre;
                 for (int j = 0; j <= Contenido.GetUpperBound(1); j++)
                 {
-
-                    TablaConfusion.Rows[i].Cells[j].Value = Contenido[i, j];
-                    
-                }
-                
-               
+                    TablaConfusion.Rows[i].Cells[j].Value = Contenido[i, j];                   
+                }                 
             }
 
            
@@ -187,35 +183,45 @@ namespace Clasificador_Bayes_Ingenuo
             MostrarDataset(Datos.TablaTitulos,Datos.TablaDiscretizada);
 
 
-            if (Validacion.Checked == true) {
-                // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
-                MessageBox.Show("entro en validacion");
-            string[,]ArregloValidacion=Datos.Validar(Datos.TablaDiscretizada,Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
+            if (Validacion.Checked == true)
+            {
+                if(txt_Entrenamiento.Text != "")
+                {
+                    // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
+                    MessageBox.Show("entro en validacion");
+                    string[,] ArregloValidacion = Datos.Validar(Datos.TablaDiscretizada, Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
 
-            MostrarDensidad(Datos.TablaTitulos, ArregloValidacion);
-            double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, Datos.TablaValores, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
-            TablaConfusio(Datos.DatosColumna[Datos.ClaseIndex].Categoria, TablaConfusion);
-            string[,] TablaEvaluacion = Datos.MetricasEvaluacion(int.Parse(txt_clase.Text)-1, TablaConfusion);
-            MostrarTablaDeEvaluacion(TablaEvaluacion);
-            txt_accuracy.Text = Datos.Accuracy.ToString();
-
-
-
+                    MostrarDensidad(Datos.TablaTitulos, ArregloValidacion);
+                    double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, Datos.TablaValores, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
+                    TablaConfusio(Datos.DatosColumna[Datos.ClaseIndex].Categoria, TablaConfusion);
+                    string[,] TablaEvaluacion = Datos.MetricasEvaluacion(int.Parse(txt_clase.Text) - 1, TablaConfusion);
+                    MostrarTablaDeEvaluacion(TablaEvaluacion);
+                    txt_accuracy.Text = Datos.Accuracy.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("Falta el porcentaje de entrenamiento");
+                }
             }
             else
             {
-                DatosPrueba = Datos.DatosPrueba(txt_rutaprueba.Text);
-                Datos.DiscretizarPruebas(int.Parse(txt_intervalo.Text), DatosPrueba);
-               // string[,] DatosDiscretosPrueba = Datos.DiscretizarPruebas(int.Parse(txt_intervalo.Text), DatosPrueba);
-                if (DatosPrueba.GetLength(1) != Datos.TablaValores.GetLength(1))
-                {
-                    MessageBox.Show("Datos de prueba no coinciden con la cantidad de columnas ");
+                if ((txt_rutaprueba.Text != "")) { 
+                    DatosPrueba = Datos.DatosPrueba(txt_rutaprueba.Text);
+                    Datos.DiscretizarPruebas(int.Parse(txt_intervalo.Text), DatosPrueba);
+                    // string[,] DatosDiscretosPrueba = Datos.DiscretizarPruebas(int.Parse(txt_intervalo.Text), DatosPrueba);
+                    if (DatosPrueba.GetLength(1) != Datos.TablaValores.GetLength(1))
+                    {
+                        MessageBox.Show("Datos de prueba no coinciden con la cantidad de columnas ");
+                    }
+
+                    string[,] aux = Datos.SuavisadoLaplacae(Datos.PruebaDiscretizada, Datos.ClaseIndex);
+                    MostrarDensidad(Datos.TablaTitulos, aux);
+
                 }
-
-                string [,] aux=Datos.SuavisadoLaplacae(Datos.PruebaDiscretizada, Datos.ClaseIndex);
-                MostrarDensidad(Datos.TablaTitulos,aux);
-                
-
+                else
+                {
+                    MessageBox.Show("Falta ruta de archivo de pruebas");
+                }
             }
         }
         public Form1()
@@ -231,15 +237,19 @@ namespace Clasificador_Bayes_Ingenuo
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            DialogoPruebas.Filter = "Todos los archivos|*.*|Archivo de Texto|*.txt|Archivo Separado por comas|*.csv";
-            DialogoPruebas.Title = "Cargar Dataset";
-            DialogoPruebas.ShowDialog();
-            if (File.Exists(DialogoArchivo.FileName))
+            try
             {
-                txt_rutaprueba.Text = DialogoPruebas.FileName;
-
-
-              
+                DialogoPruebas.Filter = "Todos los archivos|*.*|Archivo de Texto|*.txt|Archivo Separado por comas|*.csv";
+                DialogoPruebas.Title = "Cargar Dataset";
+                DialogoPruebas.ShowDialog();
+                if (File.Exists(DialogoArchivo.FileName))
+                {
+                    txt_rutaprueba.Text = DialogoPruebas.FileName;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error: al abrir el archivo");
             }
         }
 
