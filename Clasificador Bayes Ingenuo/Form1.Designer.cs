@@ -255,6 +255,7 @@ namespace Clasificador_Bayes_Ingenuo
             // TablaConfusion
             // 
             this.TablaConfusion.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.TablaConfusion.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.TablaConfusion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TablaConfusion.Location = new System.Drawing.Point(16, 617);
             this.TablaConfusion.Name = "TablaConfusion";
@@ -367,9 +368,9 @@ namespace Clasificador_Bayes_Ingenuo
             this.label11.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(585, 275);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(77, 21);
+            this.label11.Size = new System.Drawing.Size(146, 21);
             this.label11.TabIndex = 24;
-            this.label11.Text = "Densidad";
+            this.label11.Text = "Entrada/Validacion";
             // 
             // DialogoPruebas
             // 
