@@ -505,7 +505,7 @@ namespace Clasificador_Bayes_Ingenuo
                             if (Convert.ToDouble(columna[j]) >= Convert.ToDouble(disc[k, 1]) && (Convert.ToDouble(columna[j]) < Convert.ToDouble(disc[k, 2])))
                             {
                                 PruebaDiscretizada[j, i] = disc[k, 0];
-                                //MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
+                                //MessageBox.Show($"{columna[j]} =  {PruebaDiscretizada[j, i]}");
                                 break;
                             }
                         }
