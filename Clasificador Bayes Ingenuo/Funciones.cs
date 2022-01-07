@@ -3,18 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-
+using System.Linq;
 namespace Clasificador_Bayes_Ingenuo
 {
     public class Archivo
     {
-        private class InfoColumna
+        public struct DatosCategoria
         {
-            public struct DatosCategoria
-            {
-                public int TotalEncontrado;
-                public string Nombre;
-            }
+            public int TotalEncontrado;
+            public string Nombre;
+        }
+        public class InfoColumna
+        {
+           
             public int Indice = 1;
             public string NombreColumna;
             public bool EsClase = false;
@@ -22,8 +23,9 @@ namespace Clasificador_Bayes_Ingenuo
             public int CantidadCategorias = 0;
             public List<DatosCategoria> Categoria= new List<DatosCategoria>();
 
-            public int TotalDeDatos = 0;
-            
+            //Datos de desnsidad
+            public double Media =0; 
+            public double DesvacionEstandar = 0;
             //Se pasa la tabla i el indice que al que sacar info
 
             public void Correr(string[,] tabla, int Indice)
@@ -45,6 +47,7 @@ namespace Clasificador_Bayes_Ingenuo
                 EsNumero = double.TryParse(tabla[1, Indice], out _);
                 if (EsNumero)
                 {
+                    //En caso de que sea un numero se hace lo siguiente
 
                 }
                 else
@@ -131,14 +134,7 @@ namespace Clasificador_Bayes_Ingenuo
                 MessageBox.Show("Tabla sin transformar");
                 TransFormarArregloALista(TablaDiscretizada);
             }
-            for (int i = 0; i < TablaDiscretizada.GetLength(0); i++)
-            {
-             
-                //Se vuelve a obtener los datos del a tabla ya discretizada
-                //esto para hacer bien el vayes
-                DatosColumna[i].Correr(TablaDiscretizada, i);
-
-            }
+            
             
             List<string[]> generados = new List<string[]>();
             //Empieza a generar datos
@@ -164,6 +160,169 @@ namespace Clasificador_Bayes_Ingenuo
             }
 
         }
+        
+
+        private string[,] CambiarValoresPrueba(string[,] matrizDatos, int colClase, List<DatosCategoria> ListaClases,  int categorias, string entrenamiento)
+        {
+
+            //Se conviete a un diccionario para agilizar ciertas acciones
+            Dictionary<string, double> clases = new Dictionary<string, double>();
+
+            for (int i = 0; i < ListaClases.Count; i++)
+            {
+                clases.Add(ListaClases[i].Nombre, ListaClases[i].TotalEncontrado);
+                clases[ListaClases[i].Nombre] = 1;
+            }
+
+            //Se cuentan los datos relacionados a la tabla (Nombre, N cantidad de categorias y sus categorias Etc)
+           int[] infoCatColumna= new int[matrizDatos.GetLength(1)];
+            for (int i = 0; i < matrizDatos.GetLength(1); i++)
+            {
+
+                //Se vuelve a obtener los datos del a tabla ya discretizada
+                //esto para hacer bien el vayes
+                DatosColumna[i].Correr(matrizDatos, i);
+
+            }
+           
+            int renglonesMatriz = matrizDatos.GetLength(0);
+            int columnasMatriz = matrizDatos.GetLength(1);
+           
+            double porcentajeEnt = Double.Parse(entrenamiento) / 100;   // Porcentaje de entrenamiento proporcionado por el usuario que indica cuantos datos serán de prueba
+
+            double cantidadDatos = Math.Ceiling(renglonesMatriz * porcentajeEnt);
+
+            int indiceFinEnt = Convert.ToInt32(renglonesMatriz - cantidadDatos);
+
+            //MessageBox.Show("El indice donde se termina el entrenamiento es " + indiceFinEnt.ToString(), "Indice Fin de entrenamiento");
+
+            // Se necesita una lista de probabilidades ya que estas variaran dependiendo del numero de clases
+            double[] probabilidades = new double[clases.Count];     // Lista de probabilidades
+            int k = 1;
+
+            // Tabla que primero almacenará los contadores de cada atributo y clase, y luego almacenará las probabilidades
+            double[,] tablaProbs = new double[columnasMatriz, clases.Count];
+
+            // Se inicializa la tabla con los valores de k
+
+            for (int i = indiceFinEnt; i < renglonesMatriz; i++)    // Este for comienza en el indice desde donde se deben hacer las pruebas
+            {
+
+                //progresoBarra.Value += 1;
+
+                for (int j = 0; j < columnasMatriz; j++)
+                {
+
+                    for (int z = 0; z < clases.Count; z++)
+                    {
+                        //Le asigna a todas las probs 1
+                        tablaProbs[j, z] = k;
+
+                    }
+
+                }
+                //Se saca la probabilada de que sumando la incidencia de los datos prueba
+                // Comienza la asignacion de valores
+                for (int j = 0; j < columnasMatriz; j++)            // Este for recorre las columnas
+                {
+
+                    if (!(j == colClase))
+                    {
+
+                        // En este for se buscan los valores del valor en el que se esta parado
+                        for (int x = 0; x < indiceFinEnt; x++)          // Este for recorre los indices que son de entrenamiento
+                        {
+                            // Se recorre las clases para verificar si el valor pertenece a alguna de ellas
+                            for (int c = 0; c < clases.Count; c++)
+                            {
+                    
+
+                                //Funcion para contar la incidencia de la clase 
+                                //Si el el dato en la columna tiene                     Si el renglo tiene la clase
+
+                                if (matrizDatos[i, j].Equals(matrizDatos[x, j]) && clases.ElementAt(c).Key.Equals(matrizDatos[x, colClase]))
+                                {
+
+                                    //Cuando se cumple aumenta en uno la tabla
+                                    //MessageBox.Show("Se cumple en la hilera:" );
+                                    tablaProbs[j, c] += 1;   // Aquí se va almacenando la cantidad de veces que se tiene el valor y pertenece a la clase
+                                    Console.WriteLine();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("No se cumplio");
+                                }
+
+                            }
+
+
+                        }
+
+
+
+                    }
+                    //Conta = Conta + "-------------------------------------------------------------------------";
+
+                }
+                //MessageBox.Show(Conta);
+                //richTextBox1.Text = Conta;
+                //tablaProbs es una tabla de incidencias deacuero a las clases
+                // Se obtienen las probabilidades del renglon
+                for (int y = 0; y < clases.Count; y++)
+                {
+
+                    double probFinal = 1;
+
+                    for (int x = 0; x < columnasMatriz; x++)
+                    {
+                        if (!(x == colClase))
+                        {
+
+                            // Se debe saber cuantas categorias hay por columna, es decir, si el dato ya viene discretizado se necesita saber cuantas categorias tiene esa columna
+                            // De forma que si es igual a 0 entonces la columna no estaba discretizada
+                            if (infoCatColumna[x] == 0)
+                            {
+                                tablaProbs[x, y] /= (clases.ElementAt(y).Value + categorias);   // Se suma el numero categorias del atributo
+                            }
+                            else
+                            {
+
+                                tablaProbs[x, y] /= (clases.ElementAt(y).Value + infoCatColumna[x]);   // Se suma el numero categorias de la columna que ya estaba discretizada al atributo
+
+                            }
+
+                            probFinal *= tablaProbs[x, y];
+
+                        }
+
+                    }
+
+                    // Se guardan las probabilidades del renglón de cada clase 
+                    probabilidades[y] = probFinal * (clases.ElementAt(y).Value / renglonesMatriz);
+                    //MessageBox.Show($"La probabilidad de la clase {y} = {probabilidades[y]}", "Probabilidades");
+
+                }
+
+                // Se obtiene el indice del numero mayor y se asigna la clase al renglón mediante el indice
+                for (int x = 0; x < probabilidades.Length; x++)
+                {
+
+
+                    if (probabilidades[x] == probabilidades.Max())
+                    {
+
+                        matrizDatos[i, colClase] = clases.ElementAt(x).Key;
+                        
+                    }
+
+                }
+
+
+            }
+
+            return matrizDatos;
+        }
+
 
         //InfoColumna guarda los datos especificos a una columna
         public string SuavisadoLaplacae(List<string[]> input, int ColumnaClase)
@@ -511,9 +670,9 @@ namespace Clasificador_Bayes_Ingenuo
 
                 FilaActual++;
             }
-            for(int i = 0; i <= TablaValores.GetUpperBound(1);i++)
+            for (int i = 0; i <= TablaValores.GetUpperBound(1); i++)
             {
-                DatosColumna[i].Correr(TablaValores,i);
+                DatosColumna[i].Correr(TablaValores, i);
             }
 
             reader.Close();
