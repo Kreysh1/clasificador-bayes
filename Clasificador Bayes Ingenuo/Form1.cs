@@ -188,7 +188,7 @@ namespace Clasificador_Bayes_Ingenuo
                 if(txt_Entrenamiento.Text != "")
                 {
                     // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
-                    MessageBox.Show("entro en validacion");
+                   // MessageBox.Show("entro en validacion");
                     string[,] ArregloValidacion = Datos.Validar(Datos.TablaDiscretizada, Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
 
                     MostrarDensidad(Datos.TablaTitulos, ArregloValidacion);
