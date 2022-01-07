@@ -61,6 +61,10 @@ namespace Clasificador_Bayes_Ingenuo
             this.DatasetDensidad = new System.Windows.Forms.DataGridView();
             this.label11 = new System.Windows.Forms.Label();
             this.DialogoPruebas = new System.Windows.Forms.OpenFileDialog();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbl_Hileras = new System.Windows.Forms.Label();
+            this.lbl_col = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
@@ -259,7 +263,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.TablaConfusion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TablaConfusion.Location = new System.Drawing.Point(16, 617);
             this.TablaConfusion.Name = "TablaConfusion";
-            this.TablaConfusion.Size = new System.Drawing.Size(567, 270);
+            this.TablaConfusion.Size = new System.Drawing.Size(567, 141);
             this.TablaConfusion.TabIndex = 16;
             // 
             // label7
@@ -313,7 +317,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.F1});
             this.dvgEvaluacion.Location = new System.Drawing.Point(594, 617);
             this.dvgEvaluacion.Name = "dvgEvaluacion";
-            this.dvgEvaluacion.Size = new System.Drawing.Size(613, 270);
+            this.dvgEvaluacion.Size = new System.Drawing.Size(613, 141);
             this.dvgEvaluacion.TabIndex = 21;
             // 
             // Categorias
@@ -340,7 +344,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(957, 900);
+            this.label10.Location = new System.Drawing.Point(955, 764);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(81, 21);
             this.label10.TabIndex = 22;
@@ -349,7 +353,7 @@ namespace Clasificador_Bayes_Ingenuo
             // txt_accuracy
             // 
             this.txt_accuracy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_accuracy.Location = new System.Drawing.Point(1044, 900);
+            this.txt_accuracy.Location = new System.Drawing.Point(1042, 764);
             this.txt_accuracy.Name = "txt_accuracy";
             this.txt_accuracy.Size = new System.Drawing.Size(60, 22);
             this.txt_accuracy.TabIndex = 10;
@@ -376,12 +380,55 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.DialogoPruebas.FileName = "openFileDialog1";
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Palatino Linotype", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(105, 234);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(67, 22);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "Hileras:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Palatino Linotype", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(324, 234);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 22);
+            this.label4.TabIndex = 27;
+            this.label4.Text = "Columnas:";
+            // 
+            // lbl_Hileras
+            // 
+            this.lbl_Hileras.AutoSize = true;
+            this.lbl_Hileras.Font = new System.Drawing.Font("Palatino Linotype", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Hileras.Location = new System.Drawing.Point(174, 234);
+            this.lbl_Hileras.Name = "lbl_Hileras";
+            this.lbl_Hileras.Size = new System.Drawing.Size(0, 22);
+            this.lbl_Hileras.TabIndex = 28;
+            // 
+            // lbl_col
+            // 
+            this.lbl_col.AutoSize = true;
+            this.lbl_col.Font = new System.Drawing.Font("Palatino Linotype", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_col.Location = new System.Drawing.Point(416, 234);
+            this.lbl_col.Name = "lbl_col";
+            this.lbl_col.Size = new System.Drawing.Size(63, 22);
+            this.lbl_col.TabIndex = 29;
+            this.lbl_col.Text = "Hileras";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tomato;
-            this.ClientSize = new System.Drawing.Size(1215, 930);
+            this.ClientSize = new System.Drawing.Size(1215, 797);
+            this.Controls.Add(this.lbl_col);
+            this.Controls.Add(this.lbl_Hileras);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.DatasetDensidad);
             this.Controls.Add(this.txt_accuracy);
@@ -453,6 +500,10 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.RadioButton Validacion;
         private System.Windows.Forms.OpenFileDialog DialogoPruebas;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbl_Hileras;
+        private System.Windows.Forms.Label lbl_col;
     }
 }
 

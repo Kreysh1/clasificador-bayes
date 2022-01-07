@@ -65,7 +65,7 @@ namespace Clasificador_Bayes_Ingenuo
             
             return Tabla;
         }
-        DataGridView MostrarDensidad(string[] Titulos, string[,] Contenido)
+        DataGridView MostrarResultado(string[] Titulos, string[,] Contenido)
         {
 
             DatasetDensidad.Columns.Clear();
@@ -141,9 +141,11 @@ namespace Clasificador_Bayes_Ingenuo
                     Datos.LeerArchivo(txt_dataset.Text);
                     
                     txt_clase.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
-                    
+                    lbl_col.Text = ""+(Datos.TablaValores.GetUpperBound(1) + 1);
+
                     txt_intervalo.Maximum = Datos.TablaValores.GetUpperBound(0) + 1;
-                  
+                    lbl_Hileras.Text = "" + (Datos.TablaValores.GetUpperBound(0) + 1);
+
                     dgvDataset.Columns.Clear();
                     dgvDataset.Rows.Clear();
                     txt_clase.Text = txt_clase.Maximum.ToString();
@@ -172,6 +174,22 @@ namespace Clasificador_Bayes_Ingenuo
             }
 
         }
+        string[,] DevolverTablaReducida(string[,]Tabla,int Tamano)
+        {
+
+            //Se Convierte el los la cadena del porcentage de entrenamiento a unn decimal correspondiente
+
+
+            string[,] TablaReducida = new string[Tamano, Tabla.GetLength(1)];
+            for (int i = 0; i < TablaReducida.GetLength(0); i++)
+            {
+                for (int j = 0; j < Tabla.GetLength(1); j++)
+                {
+                    TablaReducida[i, j] = Tabla[i, j];
+                }
+            }
+            return TablaReducida;
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -191,8 +209,11 @@ namespace Clasificador_Bayes_Ingenuo
                    // MessageBox.Show("entro en validacion");
                     string[,] ArregloValidacion = Datos.Validar(Datos.TablaDiscretizada, Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
 
-                    MostrarDensidad(Datos.TablaTitulos, ArregloValidacion);
-                    double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, Datos.TablaValores, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
+                    MostrarResultado(Datos.TablaTitulos, ArregloValidacion);
+                    string[,] TablaReducida = DevolverTablaReducida(Datos.TablaValores, ArregloValidacion.GetLength(0));
+                    double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, TablaReducida, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
+                    
+                    
                     TablaConfusio(Datos.DatosColumna[Datos.ClaseIndex].Categoria, TablaConfusion);
                     string[,] TablaEvaluacion = Datos.MetricasEvaluacion(int.Parse(txt_clase.Text) - 1, TablaConfusion);
                     MostrarTablaDeEvaluacion(TablaEvaluacion);
@@ -215,7 +236,7 @@ namespace Clasificador_Bayes_Ingenuo
                     }
 
                     string[,] aux = Datos.SuavisadoLaplacae(Datos.PruebaDiscretizada, Datos.ClaseIndex);
-                    MostrarDensidad(Datos.TablaTitulos, aux);
+                    MostrarResultado(Datos.TablaTitulos, aux);
 
                 }
                 else

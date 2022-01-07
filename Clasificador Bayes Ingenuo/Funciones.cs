@@ -344,8 +344,18 @@ namespace Clasificador_Bayes_Ingenuo
 
 
             }
+            //como los indices ultimo quedan intactos re regresa la tabla
+            int TamanoReducido = (int)(Tabla.GetLength(0) - CantidadDeDatosEnLaTabla);
+            string[,] TablaReducida = new string[TamanoReducido, Tabla.GetLength(1)];
+            for(int i= 0; i <TablaReducida.GetLength(0); i++) 
+            {
+                for(int j= 0;j < Tabla.GetLength(1); j++)
+                {
+                    TablaReducida[i, j] = Tabla[i, j];
+                }
+            }
 
-            return Tabla;
+            return TablaReducida;
         }
 
 
