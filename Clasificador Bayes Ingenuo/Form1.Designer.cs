@@ -35,14 +35,14 @@ namespace Clasificador_Bayes_Ingenuo
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txt_Entrenamiento = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.Validacion = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txt_Entrenamiento = new System.Windows.Forms.TextBox();
+            this.txt_rutaprueba = new System.Windows.Forms.TextBox();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.DialogoArchivo = new System.Windows.Forms.OpenFileDialog();
             this.txt_clase = new System.Windows.Forms.NumericUpDown();
             this.dgvDataset = new System.Windows.Forms.DataGridView();
             this.txt_intervalo = new System.Windows.Forms.NumericUpDown();
@@ -52,18 +52,22 @@ namespace Clasificador_Bayes_Ingenuo
             this.label6 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.dvgEvaluacion = new System.Windows.Forms.DataGridView();
-            this.label10 = new System.Windows.Forms.Label();
-            this.txt_accuracy = new System.Windows.Forms.TextBox();
             this.Categorias = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Precision = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Recall = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.F1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txt_accuracy = new System.Windows.Forms.TextBox();
+            this.DatasetDensidad = new System.Windows.Forms.DataGridView();
+            this.label11 = new System.Windows.Forms.Label();
+            this.DialogoPruebas = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TablaConfusion)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dvgEvaluacion)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DatasetDensidad)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -108,7 +112,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Palatino Linotype", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(20, 211);
+            this.label3.Location = new System.Drawing.Point(602, 90);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 22);
             this.label3.TabIndex = 4;
@@ -117,35 +121,31 @@ namespace Clasificador_Bayes_Ingenuo
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Tomato;
+            this.groupBox1.Controls.Add(this.Validacion);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.txt_Entrenamiento);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.txt_rutaprueba);
             this.groupBox1.Controls.Add(this.radioButton6);
             this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.groupBox1.Location = new System.Drawing.Point(100, 197);
+            this.groupBox1.Location = new System.Drawing.Point(682, 76);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(467, 133);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             // 
-            // txt_Entrenamiento
+            // Validacion
             // 
-            this.txt_Entrenamiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Entrenamiento.Location = new System.Drawing.Point(218, 16);
-            this.txt_Entrenamiento.Name = "txt_Entrenamiento";
-            this.txt_Entrenamiento.Size = new System.Drawing.Size(60, 22);
-            this.txt_Entrenamiento.TabIndex = 7;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Palatino Linotype", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(38, 19);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(174, 17);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Porcentaje de entrenamiento:";
+            this.Validacion.AutoSize = true;
+            this.Validacion.Checked = true;
+            this.Validacion.Font = new System.Drawing.Font("Palatino Linotype", 9.75F);
+            this.Validacion.Location = new System.Drawing.Point(17, 14);
+            this.Validacion.Name = "Validacion";
+            this.Validacion.Size = new System.Drawing.Size(133, 22);
+            this.Validacion.TabIndex = 10;
+            this.Validacion.TabStop = true;
+            this.Validacion.Text = "Validacion simple";
+            this.Validacion.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.Validacion.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -155,24 +155,33 @@ namespace Clasificador_Bayes_Ingenuo
             this.button1.TabIndex = 9;
             this.button1.Text = "Ruta...";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // textBox2
+            // txt_Entrenamiento
             // 
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(48, 90);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(317, 22);
-            this.textBox2.TabIndex = 9;
+            this.txt_Entrenamiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_Entrenamiento.Location = new System.Drawing.Point(218, 16);
+            this.txt_Entrenamiento.Name = "txt_Entrenamiento";
+            this.txt_Entrenamiento.Size = new System.Drawing.Size(60, 22);
+            this.txt_Entrenamiento.TabIndex = 7;
+            // 
+            // txt_rutaprueba
+            // 
+            this.txt_rutaprueba.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_rutaprueba.Location = new System.Drawing.Point(17, 90);
+            this.txt_rutaprueba.Name = "txt_rutaprueba";
+            this.txt_rutaprueba.Size = new System.Drawing.Size(317, 22);
+            this.txt_rutaprueba.TabIndex = 9;
+            this.txt_rutaprueba.TextChanged += new System.EventHandler(this.txt_rutaprueba_TextChanged);
             // 
             // radioButton6
             // 
             this.radioButton6.AutoSize = true;
             this.radioButton6.Font = new System.Drawing.Font("Palatino Linotype", 9.75F);
-            this.radioButton6.Location = new System.Drawing.Point(17, 62);
+            this.radioButton6.Location = new System.Drawing.Point(20, 62);
             this.radioButton6.Name = "radioButton6";
             this.radioButton6.Size = new System.Drawing.Size(195, 22);
             this.radioButton6.TabIndex = 0;
-            this.radioButton6.TabStop = true;
             this.radioButton6.Text = "Archivo de pruebas externo:";
             this.radioButton6.UseVisualStyleBackColor = true;
             // 
@@ -180,7 +189,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Palatino Linotype", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(23, 352);
+            this.label5.Location = new System.Drawing.Point(687, 230);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(210, 22);
             this.label5.TabIndex = 9;
@@ -189,7 +198,7 @@ namespace Clasificador_Bayes_Ingenuo
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(460, 352);
+            this.button2.Location = new System.Drawing.Point(1042, 231);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 23);
             this.button2.TabIndex = 10;
@@ -197,9 +206,9 @@ namespace Clasificador_Bayes_Ingenuo
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // openFileDialog1
+            // DialogoArchivo
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.DialogoArchivo.FileName = "openFileDialog1";
             // 
             // txt_clase
             // 
@@ -221,14 +230,14 @@ namespace Clasificador_Bayes_Ingenuo
             // dgvDataset
             // 
             this.dgvDataset.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDataset.Location = new System.Drawing.Point(590, 85);
+            this.dgvDataset.Location = new System.Drawing.Point(16, 299);
             this.dgvDataset.Name = "dgvDataset";
-            this.dgvDataset.Size = new System.Drawing.Size(613, 291);
+            this.dgvDataset.Size = new System.Drawing.Size(563, 291);
             this.dgvDataset.TabIndex = 14;
             // 
             // txt_intervalo
             // 
-            this.txt_intervalo.Location = new System.Drawing.Point(234, 356);
+            this.txt_intervalo.Location = new System.Drawing.Point(898, 234);
             this.txt_intervalo.Minimum = new decimal(new int[] {
             2,
             0,
@@ -245,8 +254,9 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             // TablaConfusion
             // 
+            this.TablaConfusion.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.TablaConfusion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TablaConfusion.Location = new System.Drawing.Point(12, 432);
+            this.TablaConfusion.Location = new System.Drawing.Point(16, 617);
             this.TablaConfusion.Name = "TablaConfusion";
             this.TablaConfusion.Size = new System.Drawing.Size(567, 270);
             this.TablaConfusion.TabIndex = 16;
@@ -255,7 +265,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(586, 60);
+            this.label7.Location = new System.Drawing.Point(24, 275);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 21);
             this.label7.TabIndex = 17;
@@ -275,7 +285,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(8, 409);
+            this.label6.Location = new System.Drawing.Point(12, 594);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(156, 21);
             this.label6.TabIndex = 19;
@@ -285,7 +295,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(586, 408);
+            this.label9.Location = new System.Drawing.Point(590, 593);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(161, 21);
             this.label9.TabIndex = 20;
@@ -293,34 +303,17 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             // dvgEvaluacion
             // 
+            this.dvgEvaluacion.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dvgEvaluacion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dvgEvaluacion.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Categorias,
             this.Precision,
             this.Recall,
             this.F1});
-            this.dvgEvaluacion.Location = new System.Drawing.Point(590, 432);
+            this.dvgEvaluacion.Location = new System.Drawing.Point(594, 617);
             this.dvgEvaluacion.Name = "dvgEvaluacion";
             this.dvgEvaluacion.Size = new System.Drawing.Size(613, 270);
             this.dvgEvaluacion.TabIndex = 21;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(953, 715);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(81, 21);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "Accuracy:";
-            // 
-            // txt_accuracy
-            // 
-            this.txt_accuracy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_accuracy.Location = new System.Drawing.Point(1030, 714);
-            this.txt_accuracy.Name = "txt_accuracy";
-            this.txt_accuracy.Size = new System.Drawing.Size(60, 22);
-            this.txt_accuracy.TabIndex = 10;
             // 
             // Categorias
             // 
@@ -342,12 +335,54 @@ namespace Clasificador_Bayes_Ingenuo
             this.F1.HeaderText = "F1";
             this.F1.Name = "F1";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(957, 900);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(81, 21);
+            this.label10.TabIndex = 22;
+            this.label10.Text = "Accuracy:";
+            // 
+            // txt_accuracy
+            // 
+            this.txt_accuracy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_accuracy.Location = new System.Drawing.Point(1044, 900);
+            this.txt_accuracy.Name = "txt_accuracy";
+            this.txt_accuracy.Size = new System.Drawing.Size(60, 22);
+            this.txt_accuracy.TabIndex = 10;
+            // 
+            // DatasetDensidad
+            // 
+            this.DatasetDensidad.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DatasetDensidad.Location = new System.Drawing.Point(589, 299);
+            this.DatasetDensidad.Name = "DatasetDensidad";
+            this.DatasetDensidad.Size = new System.Drawing.Size(622, 291);
+            this.DatasetDensidad.TabIndex = 23;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(585, 275);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(77, 21);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "Densidad";
+            // 
+            // DialogoPruebas
+            // 
+            this.DialogoPruebas.FileName = "openFileDialog1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Tomato;
-            this.ClientSize = new System.Drawing.Size(1215, 748);
+            this.ClientSize = new System.Drawing.Size(1215, 895);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.DatasetDensidad);
             this.Controls.Add(this.txt_accuracy);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.dvgEvaluacion);
@@ -377,6 +412,7 @@ namespace Clasificador_Bayes_Ingenuo
             ((System.ComponentModel.ISupportInitialize)(this.txt_intervalo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TablaConfusion)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dvgEvaluacion)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DatasetDensidad)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -391,13 +427,12 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txt_Entrenamiento;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txt_rutaprueba;
         private System.Windows.Forms.RadioButton radioButton6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog DialogoArchivo;
         private System.Windows.Forms.NumericUpDown txt_clase;
         private System.Windows.Forms.DataGridView dgvDataset;
         private System.Windows.Forms.NumericUpDown txt_intervalo;
@@ -413,6 +448,10 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.DataGridViewTextBoxColumn Precision;
         private System.Windows.Forms.DataGridViewTextBoxColumn Recall;
         private System.Windows.Forms.DataGridViewTextBoxColumn F1;
+        private System.Windows.Forms.DataGridView DatasetDensidad;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.RadioButton Validacion;
+        private System.Windows.Forms.OpenFileDialog DialogoPruebas;
     }
 }
 
