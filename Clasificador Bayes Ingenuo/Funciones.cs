@@ -535,28 +535,23 @@ namespace Clasificador_Bayes_Ingenuo
         public double[] Recall;
         public double[] F1;
         public double Accuracy;
+        public string[,] evaluacion;
 
-        public void MetricasEvaluacion(int clase, int[,] tabla= null)
+        public string[,] MetricasEvaluacion(int clase, double[,] values)
         {
-
-            int [,]values = new int[3, 3] 
-            { 
-                {3,3,2},
-                {1,3,2},
-                {2,1,3}
-            };
             Precision = new double[DatosColumna[clase].CantidadCategorias];
             Recall = new double[DatosColumna[clase].CantidadCategorias];
             F1 = new double[DatosColumna[clase].CantidadCategorias];
             Accuracy = 0;
+            evaluacion = new string[DatosColumna[clase].CantidadCategorias, 4];
 
-            for (int i = 0; i <= DatosColumna[clase].CantidadCategorias; i++)
+            for (int i = 0; i < DatosColumna[clase].CantidadCategorias; i++)
             {
                 double precisionDiv = 0;
                 double recallDiv = 0;
 
 
-                for (int j = 0; j <= DatosColumna[clase].CantidadCategorias; j++)
+                for (int j = 0; j < DatosColumna[clase].CantidadCategorias; j++)
                 {
 
                     precisionDiv += values[i, j];
@@ -576,11 +571,17 @@ namespace Clasificador_Bayes_Ingenuo
                 F1[i] = 2 * ((Precision[i] * Recall[i]) / (Precision[i] + Recall[i]));
 
                 //dgvMetricas.Rows.Add(clases.ElementAt(i).Key, precision[i].ToString("0.###"), recall[i].ToString("0.###"), f1[i].ToString("0.###"));
-                MessageBox.Show($"{DatosColumna[clase].Categoria[i].Nombre}|{Precision[i].ToString("0.###")}|{Recall[i].ToString("0.###")}|{F1[i].ToString("0.###")}");
+                evaluacion[i, 0] = DatosColumna[clase].Categoria[i].Nombre;
+                evaluacion[i, 1] = Precision[i].ToString();
+                evaluacion[i, 2] = Recall[i].ToString();
+                evaluacion[i, 3] = F1[i].ToString();
+                //MessageBox.Show($"Clase:{DatosColumna[clase].Categoria[i].Nombre}|Precision:{Precision[i].ToString("0.###")}|Recall:{Recall[i].ToString("0.###")}|F1:{F1[i].ToString("0.###")}");
             }
 
             Accuracy /= TablaValores.GetUpperBound(0);
-            MessageBox.Show($"{Accuracy.ToString("0.###")}");
+            //MessageBox.Show($"Accuracy:{Accuracy.ToString("0.###")}");
+
+            return evaluacion;
         }
 
         public void LeerArchivo(string DirArchivo)

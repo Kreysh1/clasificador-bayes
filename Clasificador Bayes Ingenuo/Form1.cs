@@ -59,6 +59,23 @@ namespace Clasificador_Bayes_Ingenuo
 
             return Tabla;
         }
+        DataGridView MostrarTablaDeEvaluacion(string[,] Contenido)
+        {
+            dgvDataset.Columns.Clear();
+            dgvDataset.Rows.Clear();
+            DataGridView Tabla = new DataGridView();
+
+            for (int i = 0; i <= Contenido.GetUpperBound(0); i++)
+            {
+                dvgEvaluacion.Rows.Add();
+                for (int j = 0; j <= Contenido.GetUpperBound(1); j++)
+                {
+                    dvgEvaluacion.Rows[i].Cells[j].Value = Contenido[i, j];
+                }
+            }
+
+            return Tabla;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -75,7 +92,7 @@ namespace Clasificador_Bayes_Ingenuo
                    
                     Datos.LeerArchivo(txt_dataset.Text);
                     
-                    numUpDown.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
+                    txt_clase.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
                     txt_intervalo.Maximum = Datos.TablaValores.GetUpperBound(0) + 1;
 
                     dgvDataset.Columns.Clear();
@@ -111,7 +128,7 @@ namespace Clasificador_Bayes_Ingenuo
         {
             //Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text));
             //, int.Parse(numUpDown.Text)
-            Datos.ClaseIndex =int.Parse(numUpDown.Text) -1;
+            Datos.ClaseIndex =int.Parse(txt_clase.Text) -1;
 
             Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
             MostrarDataset(Datos.TablaTitulos,Datos.TablaDiscretizada);
@@ -121,8 +138,11 @@ namespace Clasificador_Bayes_Ingenuo
             string[,]ArregloValidacion=Datos.Validar(Datos.TablaDiscretizada,Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
 
             double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, Datos.TablaValores, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
-            
-            
+
+            string[,] TablaEvaluacion = Datos.MetricasEvaluacion(int.Parse(txt_clase.Text)-1, TablaConfusion);
+            MostrarTablaDeEvaluacion(TablaEvaluacion);
+            txt_accuracy.Text = Datos.Accuracy.ToString();
+
             List<string[]> Pruebas = new List<string[]>();
 
             //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
@@ -139,5 +159,6 @@ namespace Clasificador_Bayes_Ingenuo
         {
             InitializeComponent();
         }
+
     }
 }
