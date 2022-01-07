@@ -103,7 +103,7 @@ namespace Clasificador_Bayes_Ingenuo
         public string[,] TablaValores;
         public string[] TablaTitulos;
         public string[] ValoresPrueba;
-        public List<string[]> TablaDiscreta = new List<string[]>();
+        public List<string[]> ListaTablaDiscreta = new List<string[]>();
        
         void TransFormarArregloALista(string[,] Entrada)
         {
@@ -114,7 +114,7 @@ namespace Clasificador_Bayes_Ingenuo
                 {
                     Temp[j] = Entrada[i, j];
                 }
-                TablaDiscreta.Add(Temp);
+                ListaTablaDiscreta.Add(Temp);
             }
         }
         //Dimensiones de la tabla
@@ -481,6 +481,130 @@ namespace Clasificador_Bayes_Ingenuo
             }
         }
 
+        public string[,] DiscretizarPruebas(int intervalo, string[,] values)
+        {
+            string[,] Entrada = new string[values.GetLength(0), values.GetLength(0)];
+            for (int i = 0; i <= values.GetUpperBound(1); i++)
+            {
+                bool EsNumero = double.TryParse(values[0, i], out _); // Comprueba que el primer valor de la columna sea un numero (valor continuo)
+                if (EsNumero)
+                {
+
+                    double[] sortedValues = new double[values.GetUpperBound(0) + 1];
+
+                    //Carga la columna en un array unidimensional
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {
+                        //MessageBox.Show(values[j, i]);
+                        sortedValues[j] = Convert.ToDouble(values[j, i]);
+                    }
+
+                    Array.Sort(sortedValues);
+
+                    int elementos = sortedValues.Length;
+                    int categorias = intervalo;
+                    double rangos = (double)elementos / (double)categorias;
+                    var entero = (long)rangos;
+                    var decimalPart = rangos - entero;
+
+                    //MessageBox.Show(decimalPart.ToString());
+
+                    //Redondear el valor de los rangos
+                    if (decimalPart >= 0.5)
+                    {
+                        rangos = entero + 1;
+                    }
+                    else
+                    {
+                        rangos = entero; //<== Se puede quitar
+                    }
+
+
+                    //MessageBox.Show($"Rangos:{rangos.ToString("F2")}Categorias:{categorias.ToString()}");
+
+                    int pivote = (int)rangos;
+                    string[,] disc = new string[categorias, 3];
+
+                    //Detectar valor de los rangos ===========================
+                    int x = 0;
+                    for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
+                    {
+                        if ((j == pivote - 1) && (j < sortedValues.Length - 1))
+                        {
+                            double valor = (Convert.ToDouble(sortedValues[pivote]) + Convert.ToDouble(sortedValues[pivote - 1])) / 2;
+
+                            disc[x, 0] = $"Cat{x + 1}";
+                            //Valors "MAYOR O IGUAL QUE"
+                            if (x == 0)
+                            {
+                                disc[x, 1] = "0";
+                            }
+                            else
+                            {
+                                disc[x, 1] = disc[x - 1, 2];
+                            }
+                            //Valors "MENOR"
+                            if (x == categorias - 1)
+                            {
+                                disc[x, 2] = "9999999999999";
+                            }
+                            else
+                            {
+                                disc[x, 2] = valor.ToString();
+                            }
+                            //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                            pivote += (int)rangos;
+                            //MessageBox.Show($"Pivote:{pivote} sortedLength: {sortedValues.Length}");
+                            x++;
+                        }
+                    }
+                    //MessageBox.Show(x.ToString());
+                    if (x < categorias)
+                    {
+                        disc[x, 0] = $"Cat{x + 1}";
+                        disc[x, 1] = disc[x - 1, 2];                                    //MAYOR O IGUAL
+                        disc[x, 2] = "99999999999999999999999999999999999999";          //MENOR
+                        //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
+                    }
+
+                    ////Discretizacion ==================================
+
+                    //Vuelve a cargar los datos de la columna (para que no salgan ordenados)
+                    //Carga la columna en un array unidimensional
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {
+                        //MessageBox.Show(values[j, i]);
+                        sortedValues[j] = Convert.ToDouble(values[j, i]);
+                    }
+
+                    //Para el array con todos los valores.
+                    x = 0;
+                    for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
+                    {
+                        for (int k = 0; k <= disc.GetUpperBound(0); k++)
+                        {
+                            if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[k, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[k, 2])))
+                            {
+                                Entrada[j, i] = disc[k, 0];
+                                //MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    // Aca entra cuando los valores de la columna son discretos (osea que los valores son categorias)
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {
+                        //MessageBox.Show(values[j, i]);
+                        Entrada[j, i] = values[j, i];
+                    }
+                }
+            }
+            return Entrada;
+        }
 
         private void DeterminarDimensiones(string DirArchivo)
         {
@@ -792,6 +916,196 @@ namespace Clasificador_Bayes_Ingenuo
 
             return null;
         }
-    }
+        public string[,] SuavisadoLaplacae(string[,]TablaEntrada, int ColumnaClase)
+        {
+            //en el caso de que este vacia
 
+            //Se transforma la tabla a una lista
+            List<string[]> input= new List<string[]>();
+
+            for(int i = 0; i < TablaEntrada.GetLength(0); i++)
+            {
+                string[] temporal = new string[TablaEntrada.GetLength(1)];
+                for ( int j = 0; j < TablaEntrada.GetLength(1); j++)
+                {
+                    temporal[j]=TablaEntrada[i,j];
+                    
+                }
+                input.Add(temporal);
+            }
+            //Convierte la tabla en una lista de vectores string
+            List<string[]> TablaLista = new List<string[]>();
+            for (int i = 0; i < TablaDiscretizada.GetLength(0); i++)
+            {
+                string[] temporal = new string[TablaEntrada.GetLength(1)];
+                for (int j = 0; j < TablaDiscretizada.GetLength(1); j++)
+                {
+                    temporal[j] = TablaDiscretizada[i, j];
+
+                }
+                TablaLista.Add(temporal);
+            }
+
+            Console.WriteLine();
+
+
+            int ContarIndicidencia(int indiceSearch, string Categoria, string CategoriaCadena)
+            {
+                int Contar = 0;
+                for (int i = 0; i < TablaLista.Count; i++)
+                {
+
+
+                    //&& TablaLista[i][ColumnaClase] == CategoriaCadena
+                    if (TablaLista[i][indiceSearch] == Categoria)
+                    {
+                        if (TablaLista[i][ColumnaClase] == CategoriaCadena)
+                        {
+                            //MessageBox.Show("Se encontro incidencia" + "\n" + TablaLista[i][indiceSearch] + " | " + TablaLista[i][ColumnaClase]);
+                            Contar++;
+                        }
+
+                    }
+
+                }
+
+
+                return Contar;
+            }
+            //p(+) = 3 / 10
+            //p(Amarillo | +) = (0 + 1) / (3 + 4)
+            //p(no | +) = (0 + 1) / (3 + 2)
+            //p(pequeño | +) = (2 + 1) / (3 + 3)
+            //p(alta | +) = (3 + 1) / (3 + 3)
+
+            //p(-) = 7 / 10
+            //P(Amarillo | -) = (3 + 1) / (7 + 4)
+            //p(no | -) = (4 + 1) / (7 + 2)
+            //p(pequeño | -) = (2 + 1) / (7 + 3)
+            //p(alta | -) = (1 + 1) / (7 + 3)
+
+            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
+            //3 / 10 * (0 + 1) / (3 + 4) * (0 + 1) / (3 + 2) * (2 + 1) / (3 + 3) * (3 + 1) / (3 + 3) = 0.00285714
+
+
+            //P(-) P(Amarillo |-) P(no |-) P(pequeño |-) P(alta |-) = 0.007
+            // 7 / 10 * (3 + 1) / (7 + 4) * (4 + 1) / (7 + 2) * (2 + 1) / (7 + 3) * (1 + 1) / (7 + 3) = 0.00848485
+
+            //empieza laplace
+            //almacena el resultado de cada bayes 
+            double[] Clase = new double[DatosColumna[ColumnaClase].CantidadCategorias];
+            //Ciclo para obtener el 
+            double bayesSuave(string[] Entrada, int IndiceClase)
+            {
+
+                double[] AuxiliarBayes = new double[DatosColumna.GetLength(0)];
+
+                // I controla la Categoria Clase 
+                //Nombre de la categoria interesada
+                string Categoria = DatosColumna[ColumnaClase].Categoria[IndiceClase].Nombre;
+
+                //Ciclo para sacar el bayes
+
+
+                for (int i = 0; i <= Entrada.GetUpperBound(0); i++)
+                {
+
+                    double Arriba;
+                    double Abajo;
+                    if (i == ColumnaClase)
+                    {
+                        Arriba = DatosColumna[i].Categoria[IndiceClase].TotalEncontrado;
+                        Abajo = TablaLista.Count;
+                        //MessageBox.Show(i + "CLASE| " + Arriba + "\n" + Abajo);
+                        // P =  Categoria / Total de del atributos
+                        AuxiliarBayes[i] = Arriba / Abajo;
+
+                    }
+                    else
+                    {
+                        //MessageBox.Show((ContarIndicidencia(i, Entrada[i], Categoria) + 1)+ "\n" +( DatosColumna[ColumnaClase].Categoria[IndiceClase].TotalEncontrado + DatosColumna[i].CantidadCategorias));
+
+                        Arriba = (ContarIndicidencia(i, Entrada[i], Categoria) + 1);
+                        Abajo = (DatosColumna[ColumnaClase].Categoria[IndiceClase].TotalEncontrado + DatosColumna[i].CantidadCategorias);
+
+                        //MessageBox.Show(i + "| " + Arriba + "\n" + Abajo);
+                        AuxiliarBayes[i] = Arriba / Abajo;
+
+
+                    }
+                    //MessageBox.Show("Bayes Aux: " + AuxiliarBayes[i] + "");
+
+                }
+
+
+
+
+
+                double Resultado = 1;
+                //Resultado del calculo
+                for (int i = 0; i <= AuxiliarBayes.GetUpperBound(0); i++)
+                {
+                    Resultado = Resultado * AuxiliarBayes[i];
+                }
+                //MessageBox.Show("Resul " + Resultado);
+                return Resultado;
+            }
+
+            double[] MayorDeArreglo(double[] Arreglo)
+            {
+                //Guarda el indice al que pertenece en el 1 y en el 0, su valor
+                double[] Mayor = new double[2];
+
+                Mayor[0] = Arreglo[0];
+                Mayor[1] = 0;
+                for (int i = 0; i <= Arreglo.GetUpperBound(0); i++)
+                {
+                    if (Arreglo[i] > Mayor[0])
+                    {
+                        Mayor[0] = Arreglo[i];
+                        Mayor[1] = i;
+                    }
+                }
+                return Mayor;
+            }
+            //Se calcula el valor para cada clase
+            //Se asigna el resultado a cada elemento de la lista 
+            for (int x = 0; x< input.Count;x++) { 
+                    for (int i = 0; i < input.Count; i++)
+                    {
+                        for (int j = 0; j <= Clase.GetUpperBound(0); j++)
+                        {
+                            //Se guarda el resultado de cada bayes
+                            Clase[j] = bayesSuave(input[i], j);
+                   
+                           // MessageBox.Show("Clase: " + Clase[j] + "\n Indice: " + j + " " + DatosColumna[ColumnaClase].Categoria[j].Nombre);
+                        }
+                    }
+                    // input[i][j] =
+                    //Se determina a cual clase pertenece
+                   
+                    double[] Resul = MayorDeArreglo(Clase);
+                        int indice = ((int)Resul[1]);
+                
+                input[x][ColumnaClase] = DatosColumna[ColumnaClase].Categoria[indice].Nombre;
+                Console.WriteLine();
+                //MessageBox.Show("Fue :" + DatosColumna[ColumnaClase].Categoria[indice].Nombre);
+            }
+
+           
+            //Transformar 
+            string[,] Output = new string[input.Count, input[0].Length];
+            for(int i = 0; i < input.Count; i++)
+            {
+                for(int j =0; j< input[0].Length; j++)
+                {
+                    Output[i, j] = input[i][j];
+                }
+            }
+
+            return Output;
+        }
+    }
 }
+
+

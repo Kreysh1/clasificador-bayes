@@ -15,9 +15,41 @@ namespace Clasificador_Bayes_Ingenuo
     public partial class Form1 : Form
     {
         public static Archivo Datos = new Archivo();
+        string[,] DatosPrueba;
+        void TablaConfusio(List<Archivo.DatosCategoria>Clases , double[,] Contenido )
+        {
+            TablaConfusion.Columns.Clear();
+            TablaConfusion.Rows.Clear();
+            DataGridView Tabla = new DataGridView();
+            //TablaConfusion.Columns.Add($"", "");
+            for (int i = 0; i < Clases.Count; i++)
+            {
+               
+                TablaConfusion.Columns.Add($"Columna{i}", Clases[i].Nombre);
+                //MessageBox.Show("Columna");
+            }
+            
+            
+            for (int i = 0; i <= Contenido.GetUpperBound(0); i++)
+            {
+                TablaConfusion.Rows.Add();
+                //MessageBox.Show(TablaConfusion.Rows.Count.ToString());
+                //TablaConfusion.Rows[i].Cells[0].Value = Clases[i].Nombre;
+                for (int j = 0; j <= Contenido.GetUpperBound(1); j++)
+                {
 
+                    TablaConfusion.Rows[i].Cells[j].Value = Contenido[i, j];
+                    
+                }
+                
+               
+            }
+
+           
+        }
         DataGridView MostrarDataset(string[] Titulos, string[,] Contenido)
         {
+            
             dgvDataset.Columns.Clear();
             dgvDataset.Rows.Clear();
             DataGridView Tabla = new DataGridView();
@@ -34,7 +66,29 @@ namespace Clasificador_Bayes_Ingenuo
                     dgvDataset.Rows[i].Cells[j].Value = Contenido[i, j];
                 }
             }
+            
+            return Tabla;
+        }
+        DataGridView MostrarDensidad(string[] Titulos, string[,] Contenido)
+        {
 
+            DatasetDensidad.Columns.Clear();
+            DatasetDensidad.Rows.Clear();
+            DataGridView Tabla = new DataGridView();
+            for (int i = 0; i <= Contenido.GetUpperBound(1); i++)
+            {
+                DatasetDensidad.Columns.Add($"Columna{i}", Titulos[i].ToString());
+            }
+
+            for (int i = 0; i <= Contenido.GetUpperBound(0); i++)
+            {
+                DatasetDensidad.Rows.Add();
+                for (int j = 0; j <= Contenido.GetUpperBound(1); j++)
+                {
+                    DatasetDensidad.Rows[i].Cells[j].Value = Contenido[i, j];
+                }
+            }
+            
             return Tabla;
         }
         DataGridView MostrarTablaDeConfucion(string[] Titulos, string[,] Contenido)
@@ -79,23 +133,24 @@ namespace Clasificador_Bayes_Ingenuo
             try
             {
                 // Open File Dialog
-                openFileDialog1.Filter = "Todos los archivos|*.*|Archivo de Texto|*.txt|Archivo Separado por comas|*.csv";
-                openFileDialog1.Title = "Cargar Dataset";
-                openFileDialog1.ShowDialog();
+                DialogoArchivo.Filter = "Todos los archivos|*.*|Archivo de Texto|*.txt|Archivo Separado por comas|*.csv";
+                DialogoArchivo.Title = "Cargar Dataset";
+                DialogoArchivo.ShowDialog();
 
-                if (File.Exists(openFileDialog1.FileName))
+                if (File.Exists(DialogoArchivo.FileName))
                 {
-                    txt_dataset.Text = openFileDialog1.FileName;
+                    txt_dataset.Text = DialogoArchivo.FileName;
 
                    
                     Datos.LeerArchivo(txt_dataset.Text);
                     
                     txt_clase.Maximum = Datos.TablaValores.GetUpperBound(1) + 1;
+                    
                     txt_intervalo.Maximum = Datos.TablaValores.GetUpperBound(0) + 1;
-
+                  
                     dgvDataset.Columns.Clear();
                     dgvDataset.Rows.Clear();
-                   
+                    txt_clase.Text = txt_clase.Maximum.ToString();
                     MostrarDataset(Datos.TablaTitulos, Datos.TablaValores);
                     //for (int i = 0; i <= Datos.TablaValores.GetUpperBound(1); i++)
                     //{
@@ -131,29 +186,36 @@ namespace Clasificador_Bayes_Ingenuo
             Datos.DiscretizacionFrencuencias(int.Parse(txt_intervalo.Text), Datos.TablaValores);
             MostrarDataset(Datos.TablaTitulos,Datos.TablaDiscretizada);
 
-            Datos.FuncionDensidad(Datos.TablaValores, int.Parse(txt_clase.Text));
-            // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
 
+            if (Validacion.Checked == true) {
+                // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
+                MessageBox.Show("entro en validacion");
             string[,]ArregloValidacion=Datos.Validar(Datos.TablaDiscretizada,Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
 
+            MostrarDensidad(Datos.TablaTitulos, ArregloValidacion);
             double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, Datos.TablaValores, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
-
+            TablaConfusio(Datos.DatosColumna[Datos.ClaseIndex].Categoria, TablaConfusion);
             string[,] TablaEvaluacion = Datos.MetricasEvaluacion(int.Parse(txt_clase.Text)-1, TablaConfusion);
             MostrarTablaDeEvaluacion(TablaEvaluacion);
             txt_accuracy.Text = Datos.Accuracy.ToString();
 
-            List<string[]> Pruebas = new List<string[]>();
-
-          
-            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
 
 
-            //string[] temp = { "amarillo", "no", "peque~no", "alta", "" };
-            //Pruebas.Add(temp);
-            //Datos.SuavisadoLaplacae(Pruebas, 4);
+            }
+            else
+            {
+                DatosPrueba = Datos.DatosPrueba(txt_rutaprueba.Text);
+                //string[,] DatosDiscretosPrueba = Datos.DiscretizarPruebas(int.Parse(txt_intervalo.Text), DatosPrueba);
+                if (DatosPrueba.GetLength(1) != Datos.TablaValores.GetLength(1))
+                {
+                    MessageBox.Show("Datos de prueba no coinciden con la cantidad de columnas ");
+                }
 
-            //Form2 settingsForm = new Form2();
-            //settingsForm.Show();
+                string [,] aux=Datos.SuavisadoLaplacae(DatosPrueba, Datos.ClaseIndex);
+                MostrarDensidad(Datos.TablaTitulos,aux);
+                
+
+            }
         }
         public Form1()
         {
@@ -164,6 +226,25 @@ namespace Clasificador_Bayes_Ingenuo
         {
             //string[,] DatosPrueba = Datos.DatosPrueba(@"C:\Users\alex_\Desktop\Radeon ReLive\Documentacion\datasets\prueba.txt");
             //Console.WriteLine();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            DialogoPruebas.Filter = "Todos los archivos|*.*|Archivo de Texto|*.txt|Archivo Separado por comas|*.csv";
+            DialogoPruebas.Title = "Cargar Dataset";
+            DialogoPruebas.ShowDialog();
+            if (File.Exists(DialogoArchivo.FileName))
+            {
+                txt_rutaprueba.Text = DialogoPruebas.FileName;
+
+
+              
+            }
+        }
+
+        private void txt_rutaprueba_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
