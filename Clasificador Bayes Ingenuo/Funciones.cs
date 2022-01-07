@@ -357,6 +357,8 @@ namespace Clasificador_Bayes_Ingenuo
 
         //Tabla discretizada
         public string[,] TablaDiscretizada;
+        public string[,] PruebaDiscretizada;
+        public string[,] disc;
 
         public void DiscretizacionFrencuencias(int intervalo, string[,] values)
         {
@@ -399,7 +401,7 @@ namespace Clasificador_Bayes_Ingenuo
                     //MessageBox.Show($"Rangos:{rangos.ToString("F2")}Categorias:{categorias.ToString()}");
 
                     int pivote = (int)rangos;
-                    string[,] disc = new string[categorias, 3];
+                    disc = new string[categorias, 3];
 
                     //Detectar valor de los rangos ===========================
                     int x = 0;
@@ -454,7 +456,6 @@ namespace Clasificador_Bayes_Ingenuo
                     }
 
                     //Para el array con todos los valores.
-                    x = 0;
                     for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
                     {
                         for (int k = 0; k<=disc.GetUpperBound(0); k++)
@@ -481,117 +482,34 @@ namespace Clasificador_Bayes_Ingenuo
             }
         }
 
-        public string[,] DiscretizarPruebas(int intervalo, string[,] values)
+        public void DiscretizarPruebas(int intervalo, string[,] values)
         {
-            string[,] Entrada = new string[values.GetLength(0), values.GetLength(0)];
             for (int i = 0; i <= values.GetUpperBound(1); i++)
             {
                 bool EsNumero = double.TryParse(values[0, i], out _); // Comprueba que el primer valor de la columna sea un numero (valor continuo)
                 if (EsNumero)
                 {
-
-                    double[] sortedValues = new double[values.GetUpperBound(0) + 1];
+                    double[] columna = new double[values.GetUpperBound(0) + 1];
 
                     //Carga la columna en un array unidimensional
                     for (int j = 0; j <= values.GetUpperBound(0); j++)
                     {
                         //MessageBox.Show(values[j, i]);
-                        sortedValues[j] = Convert.ToDouble(values[j, i]);
+                        columna[j] = Convert.ToDouble(values[j, i]);
                     }
 
-                    Array.Sort(sortedValues);
-
-                    int elementos = sortedValues.Length;
-                    int categorias = intervalo;
-                    double rangos = (double)elementos / (double)categorias;
-                    var entero = (long)rangos;
-                    var decimalPart = rangos - entero;
-
-                    //MessageBox.Show(decimalPart.ToString());
-
-                    //Redondear el valor de los rangos
-                    if (decimalPart >= 0.5)
-                    {
-                        rangos = entero + 1;
-                    }
-                    else
-                    {
-                        rangos = entero; //<== Se puede quitar
-                    }
-
-
-                    //MessageBox.Show($"Rangos:{rangos.ToString("F2")}Categorias:{categorias.ToString()}");
-
-                    int pivote = (int)rangos;
-                    string[,] disc = new string[categorias, 3];
-
-                    //Detectar valor de los rangos ===========================
-                    int x = 0;
-                    for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
-                    {
-                        if ((j == pivote - 1) && (j < sortedValues.Length - 1))
-                        {
-                            double valor = (Convert.ToDouble(sortedValues[pivote]) + Convert.ToDouble(sortedValues[pivote - 1])) / 2;
-
-                            disc[x, 0] = $"Cat{x + 1}";
-                            //Valors "MAYOR O IGUAL QUE"
-                            if (x == 0)
-                            {
-                                disc[x, 1] = "0";
-                            }
-                            else
-                            {
-                                disc[x, 1] = disc[x - 1, 2];
-                            }
-                            //Valors "MENOR"
-                            if (x == categorias - 1)
-                            {
-                                disc[x, 2] = "9999999999999";
-                            }
-                            else
-                            {
-                                disc[x, 2] = valor.ToString();
-                            }
-                            //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
-                            pivote += (int)rangos;
-                            //MessageBox.Show($"Pivote:{pivote} sortedLength: {sortedValues.Length}");
-                            x++;
-                        }
-                    }
-                    //MessageBox.Show(x.ToString());
-                    if (x < categorias)
-                    {
-                        disc[x, 0] = $"Cat{x + 1}";
-                        disc[x, 1] = disc[x - 1, 2];                                    //MAYOR O IGUAL
-                        disc[x, 2] = "99999999999999999999999999999999999999";          //MENOR
-                        //MessageBox.Show($"{disc[x, 0]} mayor o igual: {disc[x, 1]} menor: {disc[x, 2]}");
-                    }
-
-                    ////Discretizacion ==================================
-
-                    //Vuelve a cargar los datos de la columna (para que no salgan ordenados)
-                    //Carga la columna en un array unidimensional
-                    for (int j = 0; j <= values.GetUpperBound(0); j++)
-                    {
-                        //MessageBox.Show(values[j, i]);
-                        sortedValues[j] = Convert.ToDouble(values[j, i]);
-                    }
-
-                    //Para el array con todos los valores.
-                    x = 0;
-                    for (int j = 0; j <= sortedValues.GetUpperBound(0); j++)
+                    for (int j = 0; j <= columna.GetUpperBound(0); j++)
                     {
                         for (int k = 0; k <= disc.GetUpperBound(0); k++)
                         {
-                            if (Convert.ToDouble(sortedValues[j]) >= Convert.ToDouble(disc[k, 1]) && (Convert.ToDouble(sortedValues[j]) < Convert.ToDouble(disc[k, 2])))
+                            if (Convert.ToDouble(columna[j]) >= Convert.ToDouble(disc[k, 1]) && (Convert.ToDouble(columna[j]) < Convert.ToDouble(disc[k, 2])))
                             {
-                                Entrada[j, i] = disc[k, 0];
+                                PruebaDiscretizada[j, i] = disc[k, 0];
                                 //MessageBox.Show($"{sortedValues[j]} =  {TablaDiscretizada[j, i]}");
                                 break;
                             }
                         }
                     }
-
                 }
                 else
                 {
@@ -599,11 +517,11 @@ namespace Clasificador_Bayes_Ingenuo
                     for (int j = 0; j <= values.GetUpperBound(0); j++)
                     {
                         //MessageBox.Show(values[j, i]);
-                        Entrada[j, i] = values[j, i];
+                        PruebaDiscretizada[j, i] = values[j, i];
                     }
                 }
             }
-            return Entrada;
+            
         }
 
         private void DeterminarDimensiones(string DirArchivo)
@@ -760,35 +678,36 @@ namespace Clasificador_Bayes_Ingenuo
 
         public Densidad[,] calculosXclase;
 
+
         public void FuncionDensidad(string [,] values, int clase)
         {
             double[] columna = new double[values.GetUpperBound(0) + 1];
             double[,] calculos = new double[2, values.GetUpperBound(1) + 1];   //Aquí se guardara la media y la desviacion estandar de cada columna
 
-            // Obtiene Medias y Desv.Est. de cada columna (sin considerar las clases)
-            //for (int i = 0; i <= values.GetUpperBound(1); i++)
-            //{
-            //    if (i != clase - 1)         //Se salta la columna de clase
-            //    {
-            //        //Carga la columna en un array unidimensional
-            //        for (int j = 0; j <= values.GetUpperBound(0); j++)
-            //        {                             
-            //                //MessageBox.Show(values[j, i]);
-            //                columna[j] = Convert.ToDouble(values[j, i]);
-            //        }
+            //tiene Medias y Desv.Est.de cada columna(sin considerar las clases)
+            for (int i = 0; i <= values.GetUpperBound(1); i++)
+            {
+                if (i != clase - 1)         //Se salta la columna de clase
+                {
+                    //Carga la columna en un array unidimensional
+                    for (int j = 0; j <= values.GetUpperBound(0); j++)
+                    {
+                        //MessageBox.Show(values[j, i]);
+                        columna[j] = Convert.ToDouble(values[j, i]);
+                    }
 
-            //        calculos[0, i] = GetMedia(columna); ;                                   // Media de cada columna
-            //        calculos[1, i] = GetDesviacionEstandar(GetVarianza(columna)); ;         // Desviacion estandar de cada columna
+                    calculos[0, i] = GetMedia(columna); ;                                   // Media de cada columna
+                    calculos[1, i] = GetDesviacionEstandar(GetVarianza(columna)); ;         // Desviacion estandar de cada columna
 
-            //        //MessageBox.Show($"Media:{calculos[0, i]} Desv.Estandar:{calculos[1, i]}");
-            //    }
-            //}
+                    //MessageBox.Show($"Media:{calculos[0, i]} Desv.Estandar:{calculos[1, i]}");
+                }
+            }
 
             // Obtiene Medias y Desv.Est. de cada columna (considerando las clases)
             // EJ. Existen las clases "Hombre/Mujer", de la columna se calculan los que
-            // pertenecen a Hombre y despues los que pertenecen a mujer
-            
+            // pertenecen a Hombre y despues los que pertenecen a mujer            
             calculosXclase = new Densidad[DatosColumna[clase - 1].CantidadCategorias, values.GetUpperBound(1)+1];
+            double[,] distribucion = new double[DatosColumna[clase - 1].CantidadCategorias, values.GetUpperBound(1) + 3];
             //MessageBox.Show($"renglones:{DatosColumna[clase - 1].CantidadCategorias} cols: {values.GetUpperBound(1)}");
             for (int i = 0; i <= values.GetUpperBound(1); i++)
             {
@@ -811,16 +730,37 @@ namespace Clasificador_Bayes_Ingenuo
                             
                         }
 
-                        //media
+                        //Media
                         calculosXclase[j, i].Media = GetMedia(otracolumna);
-                        //desviacion estandar
+                        //Desviacion Estandar
                         calculosXclase[j, i].DesvEstandar = GetDesviacionEstandar(GetVarianza(otracolumna));
+                        //Distribucion Normal
+                        double prueba = GetDistribucionNormal(170, calculosXclase[j, i].Media, calculosXclase[j, i].DesvEstandar);
+                        MessageBox.Show($"x:{otracolumna[i]} media:{calculosXclase[j, i].Media} Desv:{calculosXclase[j, i].DesvEstandar}");
+                        MessageBox.Show($"Dist.Normal: {prueba}");
 
                         //MessageBox.Show($"{DatosColumna[clase - 1].Categoria[j].Nombre} | Media:{calculosXclase[j, i].Media} | Desv.Est:{calculosXclase[j, i].DesvEstandar}");
                     }
                 }
             }
         }
+
+        public double GetDistribucionNormal(double x, double media, double desvEst)
+        {
+            double Dist = 0;
+
+            const double PI = Math.PI;
+            const double E = Math.E;
+
+            double Part1 = desvEst * Math.Sqrt(2 * PI);
+            double Part2 = Math.Pow(x-media,2);
+            double Part3 = Math.Pow(2*desvEst,2);
+
+            Dist = Math.Pow((1 * E / Part1),-(Part2/Part3)); 
+            
+            return Dist;
+        }
+
 
         public double GetVarianza(double[] values)                  //(x-media) al cuadrado
         {
@@ -875,6 +815,7 @@ namespace Clasificador_Bayes_Ingenuo
                 reader.Close();
 
               string[,] Datos= new string[Prueba.Count,Prueba[0].GetLength(0)];
+              PruebaDiscretizada = new string[Prueba.Count, Prueba[0].GetLength(0)];
                 for (int i = 0; i <Prueba.Count; i++)
                 {
                    for(int j = 0; j<Prueba[i].GetLength(0); j++)
