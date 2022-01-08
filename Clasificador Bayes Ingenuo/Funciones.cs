@@ -184,10 +184,6 @@ namespace Clasificador_Bayes_Ingenuo
 
             }
 
-                
-    
-
-
 
             //for (int i = 0; i < TablaDiscreta.GetLength(0); i++)
             //{
@@ -627,7 +623,7 @@ namespace Clasificador_Bayes_Ingenuo
         public double Accuracy;
         public string[,] evaluacion;
 
-        public string[,] MetricasEvaluacion(int clase, double[,] values)
+        public string[,] MetricasEvaluacion(int clase, double[,] values, double porcentaje)
         {
             Precision = new double[DatosColumna[clase].CantidadCategorias];
             Recall = new double[DatosColumna[clase].CantidadCategorias];
@@ -635,41 +631,46 @@ namespace Clasificador_Bayes_Ingenuo
             Accuracy = 0;
             evaluacion = new string[DatosColumna[clase].CantidadCategorias, 4];
 
-            for (int i = 0; i < DatosColumna[clase].CantidadCategorias; i++)
-            {
-                double precisionDiv = 0;
-                double recallDiv = 0;
+            double realPorciento = 100 - porcentaje;
+            double poblacion = (double)(TablaValores.GetUpperBound(0)/100) * realPorciento;
 
-
-                for (int j = 0; j < DatosColumna[clase].CantidadCategorias; j++)
+                for (int i = 0; i < DatosColumna[clase].CantidadCategorias; i++)
                 {
+                    double precisionDiv = 0;
+                    double recallDiv = 0;
 
-                    precisionDiv += values[i, j];
 
-                    recallDiv += values[j, i];
-
-                    if (i == j)
+                    for (int j = 0; j < DatosColumna[clase].CantidadCategorias; j++)
                     {
-                        Accuracy += values[i, j];
 
+                        precisionDiv += values[i, j];
+
+                        recallDiv += values[j, i];
+
+                        if (i == j)
+                        {
+                            Accuracy += values[i, j];
+
+                        }
                     }
+
+                    Precision[i] = values[i, i] / precisionDiv;
+                    MessageBox.Show($"Precision |Numerador:{values[i, i]} Denominador:{precisionDiv}");
+                    Recall[i] = values[i, i] / recallDiv;
+                    MessageBox.Show($"Recall |Numerador:{values[i, i]} Denominador:{recallDiv}");
+
+                    F1[i] = 2 * ((Precision[i] * Recall[i]) / (Precision[i] + Recall[i]));
+
+                    //dgvMetricas.Rows.Add(clases.ElementAt(i).Key, precision[i].ToString("0.###"), recall[i].ToString("0.###"), f1[i].ToString("0.###"));
+                    evaluacion[i, 0] = DatosColumna[clase].Categoria[i].Nombre;
+                    evaluacion[i, 1] = Precision[i].ToString();
+                    evaluacion[i, 2] = Recall[i].ToString();
+                    evaluacion[i, 3] = F1[i].ToString();
+                    //MessageBox.Show($"Clase:{DatosColumna[clase].Categoria[i].Nombre}|Precision:{Precision[i].ToString("0.###")}|Recall:{Recall[i].ToString("0.###")}|F1:{F1[i].ToString("0.###")}");
                 }
-                
-                Precision[i] = values[i, i] / precisionDiv;
-                Recall[i] = values[i, i] / recallDiv;
 
-                F1[i] = 2 * ((Precision[i] * Recall[i]) / (Precision[i] + Recall[i]));
-
-                //dgvMetricas.Rows.Add(clases.ElementAt(i).Key, precision[i].ToString("0.###"), recall[i].ToString("0.###"), f1[i].ToString("0.###"));
-                evaluacion[i, 0] = DatosColumna[clase].Categoria[i].Nombre;
-                evaluacion[i, 1] = Precision[i].ToString();
-                evaluacion[i, 2] = Recall[i].ToString();
-                evaluacion[i, 3] = F1[i].ToString();
-                //MessageBox.Show($"Clase:{DatosColumna[clase].Categoria[i].Nombre}|Precision:{Precision[i].ToString("0.###")}|Recall:{Recall[i].ToString("0.###")}|F1:{F1[i].ToString("0.###")}");
-            }
-
-            Accuracy /= TablaValores.GetUpperBound(0);
-            //MessageBox.Show($"Accuracy:{Accuracy.ToString("0.###")}");
+                Accuracy /= poblacion;
+                //MessageBox.Show($"Accuracy:{Accuracy.ToString("0.###")}");
 
             return evaluacion;
         }

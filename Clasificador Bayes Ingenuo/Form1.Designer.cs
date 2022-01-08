@@ -65,6 +65,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.label4 = new System.Windows.Forms.Label();
             this.lbl_Hileras = new System.Windows.Forms.Label();
             this.lbl_col = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
@@ -125,6 +126,7 @@ namespace Clasificador_Bayes_Ingenuo
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Tomato;
+            this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.Validacion);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.txt_Entrenamiento);
@@ -164,7 +166,7 @@ namespace Clasificador_Bayes_Ingenuo
             // txt_Entrenamiento
             // 
             this.txt_Entrenamiento.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_Entrenamiento.Location = new System.Drawing.Point(218, 16);
+            this.txt_Entrenamiento.Location = new System.Drawing.Point(247, 41);
             this.txt_Entrenamiento.Name = "txt_Entrenamiento";
             this.txt_Entrenamiento.Size = new System.Drawing.Size(60, 22);
             this.txt_Entrenamiento.TabIndex = 7;
@@ -419,6 +421,16 @@ namespace Clasificador_Bayes_Ingenuo
             this.lbl_col.TabIndex = 29;
             this.lbl_col.Text = "Hileras";
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(62, 41);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(183, 18);
+            this.label13.TabIndex = 30;
+            this.label13.Text = "Porcentaje de Entrenamiento:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -504,6 +516,7 @@ namespace Clasificador_Bayes_Ingenuo
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lbl_Hileras;
         private System.Windows.Forms.Label lbl_col;
+        private System.Windows.Forms.Label label13;
     }
 }
 

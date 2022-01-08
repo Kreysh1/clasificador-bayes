@@ -202,7 +202,7 @@ namespace Clasificador_Bayes_Ingenuo
                     
                     
                     TablaConfusio(Datos.DatosColumna[Datos.ClaseIndex].Categoria, TablaConfusion);
-                    string[,] TablaEvaluacion = Datos.MetricasEvaluacion(int.Parse(txt_clase.Text) - 1, TablaConfusion);
+                    string[,] TablaEvaluacion = Datos.MetricasEvaluacion(int.Parse(txt_clase.Text) - 1,TablaConfusion, Convert.ToDouble(txt_Entrenamiento.Text));
                     MostrarTablaDeEvaluacion(TablaEvaluacion);
                     txt_accuracy.Text = Datos.Accuracy.ToString();
                 }
