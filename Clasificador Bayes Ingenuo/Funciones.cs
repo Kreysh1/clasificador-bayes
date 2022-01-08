@@ -136,39 +136,77 @@ namespace Clasificador_Bayes_Ingenuo
                 DatosColumnasDiscretisar[i].Correr(TablaDiscretizada, i);
             }
         }
+        
         public double[,] CrearMatrizDeConfusion(string[,] TablaDiscreta, string[,] TablaReal, List<DatosCategoria> ListaClases, int colClase)
         {
-            //Se crea un diccionaria de claes para facilizar ciertas acciones
-            Dictionary<string, double> DiccionarioDeClases = new Dictionary<string, double>();
-            for (int i = 0; i < ListaClases.Count; i++)
+            string[] Clases= new string[ListaClases.Count];
+            for (int i = 0;i < Clases.Length; i++)
             {
-                DiccionarioDeClases.Add(ListaClases[i].Nombre, ListaClases[i].TotalEncontrado);
-                DiccionarioDeClases[ListaClases[i].Nombre] = 1;
+                Clases[i]=ListaClases[i].Nombre.ToString();
             }
-
-   
-            
-
-            double[,] matrizConfusion = new double[DiccionarioDeClases.Count, DiccionarioDeClases.Count];
-
-            for (int i = 0; i < TablaDiscreta.GetLength(0); i++)
-            {
-
-                if (TablaDiscreta[i, colClase].Equals(TablaReal[i, colClase]) || TablaDiscreta[i, colClase] != TablaReal[i, colClase])
+            //Regresa el indice en el se encontr la cadena
+             int[] IndicePertenece(string[] TablaClases, string Cadena ,string Cadena2)
+           {
+               int[] indice = new int[2];
+               for (int i=0;i< TablaClases.Length; i++)
+               {
+                  if(Cadena == TablaClases[i].ToString())
+                   {
+                       indice[0]=i;
+                       
+                   }
+                }
+                for (int i = 0; i < TablaClases.Length; i++)
                 {
+                    if (Cadena2 == TablaClases[i].ToString())
+                    {
+                        indice[1] = i;
 
-                    //MessageBox.Show($"Valor en matrizDatos: {matrizDatos[i, colClase]}, Valor en matrizReal: {matrizReal[i, colClase]}", "Matriz Confusion");
-
-                    int indice1 = DiccionarioDeClases.Keys.ToList().IndexOf(TablaDiscreta[i, colClase]);
-                    int indice2 = DiccionarioDeClases.Keys.ToList().IndexOf(TablaReal[i, colClase]);
-
-                    matrizConfusion[indice1, indice2] += 1;
-                    //MessageBox.Show($"El valor de la posicion {indice1}, {indice2} es {matrizConfusion[indice1, indice2]}", "Matriz Confusion");
-                    //MessageBox.Show($"", "Matriz Confusion");
-
+                    }
                 }
 
+                return indice;
+          }
+
+            double[,] matrizConfusion = new double[ListaClases.Count, ListaClases.Count];
+
+            for (int i=0; i < TablaReal.GetLength(0); i++)
+            {
+                //MessageBox.Show("Se comparo: "+i+"| " + TablaReal[i, colClase] + " / " + TablaDiscreta[i, colClase]);
+                string aux1 = TablaReal[i, colClase];
+                string aux2 = TablaDiscreta[i, colClase];
+                int[] aux = IndicePertenece(Clases, TablaReal[i,colClase], TablaDiscreta[i, colClase]);
+                    //Seregresa 
+                   
+
+                    matrizConfusion[aux[0], aux[1]] += 1;
+                
+
             }
+
+                
+    
+
+
+
+            //for (int i = 0; i < TablaDiscreta.GetLength(0); i++)
+            //{
+
+            //    if (TablaDiscreta[i, colClase].Equals(TablaReal[i, colClase]) || TablaDiscreta[i, colClase] != TablaReal[i, colClase])
+            //    {
+
+            //        //MessageBox.Show($"Valor en matrizDatos: {matrizDatos[i, colClase]}, Valor en matrizReal: {matrizReal[i, colClase]}", "Matriz Confusion");
+
+            //        int indice1 = DiccionarioDeClases.Keys.ToList().IndexOf(TablaDiscreta[i, colClase]);
+            //        int indice2 = DiccionarioDeClases.Keys.ToList().IndexOf(TablaReal[i, colClase]);
+
+            //        matrizConfusion[indice1, indice2] += 1;
+            //        //MessageBox.Show($"El valor de la posicion {indice1}, {indice2} es {matrizConfusion[indice1, indice2]}", "Matriz Confusion");
+            //        //MessageBox.Show($"", "Matriz Confusion");
+
+            //    }
+
+            //}
 
             return matrizConfusion;
 
@@ -851,7 +889,7 @@ namespace Clasificador_Bayes_Ingenuo
 
             //Se transforma la tabla a una lista
             List<string[]> input= new List<string[]>();
-
+            //Se pasa la tabla a una lista
             for(int i = 0; i < TablaEntrada.GetLength(0); i++)
             {
                 string[] temporal = new string[TablaEntrada.GetLength(1)];
@@ -1023,6 +1061,234 @@ namespace Clasificador_Bayes_Ingenuo
             }
 
             return Output;
+        }
+        public string[,] Entrenar(string[,] TablaEntrada,int ColumnaClase , double PorcentajeEntrenamiento)
+        {
+            double PorcentajeDeEntremaniento = PorcentajeEntrenamiento / 100;
+            //Cantidad de datos en la tabla
+            double CantidadDeDatosEnLaTabla = Math.Ceiling(TablaEntrada.GetLength(0) * PorcentajeDeEntremaniento);
+
+            int IndiceFinDeEntrenamiento = Convert.ToInt32(TablaEntrada.GetLength(0) - CantidadDeDatosEnLaTabla);
+
+            string[,] TablaBayesDiscreto = new string[TablaEntrada.GetLength(0)- IndiceFinDeEntrenamiento, TablaEntrada.GetLength(1)];//Este arreglo guardara los datos pa
+
+            //se  pasan los datos que seran base para el entrenamiento
+            //seran los ultimos renglones
+
+            int IndiceEntre=0;
+            for(int i = IndiceFinDeEntrenamiento; i < TablaEntrada.GetLength(0); i++)
+            {
+                for(int j = 0; j < TablaEntrada.GetLength(1); j++)
+                {
+                    TablaBayesDiscreto[IndiceEntre ,j] = TablaEntrada[i, j];
+                }
+
+                IndiceEntre++;
+            }
+
+            //TablaEntrada funciona comom el input de la tabla
+            //TablaBayesDiscreto es la tabla ya discretizada  para aplicar el bayes sobre TAbla entrada
+            //en el caso de que este vacia
+            InfoColumna[] ColumnaLocal = new InfoColumna[TablaBayesDiscreto.GetLength(1)]; //se guarda la columna clase
+            for (int i = 0; i< ColumnaLocal.Length; i++)
+            {
+                ColumnaLocal[i]= new InfoColumna();
+                ColumnaLocal[i].Correr(TablaBayesDiscreto, i);
+            }
+
+            //Se transforma la tabla a una lista
+            List<string[]> input = new List<string[]>();
+            //Se pasa la tabla a una lista
+            for (int i = 0; i < (TablaEntrada.GetLength(0)-TablaBayesDiscreto.GetLength(0)); i++)
+            {
+                string[] temporal = new string[TablaEntrada.GetLength(1)];
+                for (int j = 0; j < TablaEntrada.GetLength(1); j++)
+                {
+                    temporal[j] = TablaEntrada[i, j];
+
+                }
+                input.Add(temporal);
+            }
+            //Convierte la tabla en una lista de vectores string
+
+
+            List<string[]> TablaLista = new List<string[]>();
+            for (int i = 0; i < TablaBayesDiscreto.GetLength(0); i++)
+            {
+                string[] temporal = new string[TablaEntrada.GetLength(1)];
+                for (int j = 0; j < TablaBayesDiscreto.GetLength(1); j++)
+                {
+                    temporal[j] = TablaBayesDiscreto[i, j];
+
+                }
+                TablaLista.Add(temporal);
+            }
+
+            Console.WriteLine();
+
+
+            int ContarIndicidencia(int indiceSearch, string Categoria, string CategoriaCadena)
+            {
+                int Contar = 0;
+                for (int i = 0; i < TablaLista.Count; i++)
+                {
+
+
+                    //&& TablaLista[i][ColumnaClase] == CategoriaCadena
+                    if (TablaLista[i][indiceSearch] == Categoria)
+                    {
+                        if (TablaLista[i][ColumnaClase] == CategoriaCadena)
+                        {
+                            //MessageBox.Show("Se encontro incidencia" + "\n" + TablaLista[i][indiceSearch] + " | " + TablaLista[i][ColumnaClase]);
+                            Contar++;
+                        }
+
+                    }
+
+                }
+
+
+                return Contar;
+            }
+
+            //P(+) P(Amarillo | +) P(no | +P(pequeño | +) P(alta | +) = 0
+            //3 / 10 * (0 + 1) / (3 + 4) * (0 + 1) / (3 + 2) * (2 + 1) / (3 + 3) * (3 + 1) / (3 + 3) = 0.00285714
+
+
+            //P(-) P(Amarillo |-) P(no |-) P(pequeño |-) P(alta |-) = 0.007
+            // 7 / 10 * (3 + 1) / (7 + 4) * (4 + 1) / (7 + 2) * (2 + 1) / (7 + 3) * (1 + 1) / (7 + 3) = 0.00848485
+
+            //empieza laplace
+
+            //Ciclo para obtener el 
+            double bayesSuave(string[] Entrada, int IndiceClase)
+            {
+
+                double[] AuxiliarBayes = new double[ColumnaLocal.GetLength(0)];
+
+                // I controla la Categoria Clase 
+                //Nombre de la categoria interesada
+                string Categoria = ColumnaLocal[ColumnaClase].Categoria[IndiceClase].Nombre;
+
+                //Ciclo para sacar el bayes
+
+
+                for (int i = 0; i <= Entrada.GetUpperBound(0); i++)
+                {
+
+                    double Arriba;
+                    double Abajo;
+                    if (i == ColumnaClase)
+                    {
+                        Arriba = ColumnaLocal[i].Categoria[IndiceClase].TotalEncontrado;
+                        Abajo = TablaLista.Count;
+                        //MessageBox.Show(i + "CLASE| " + Arriba + "\n" + Abajo);
+                        // P =  Categoria / Total de del atributos
+                        AuxiliarBayes[i] = Arriba / Abajo;
+
+                    }
+                    else
+                    {
+                        //MessageBox.Show((ContarIndicidencia(i, Entrada[i], Categoria) + 1)+ "\n" +( DatosColumna[ColumnaClase].Categoria[IndiceClase].TotalEncontrado + DatosColumna[i].CantidadCategorias));
+
+                        Arriba = (ContarIndicidencia(i, Entrada[i], Categoria) + 1);
+                        Abajo = (ColumnaLocal[ColumnaClase].Categoria[IndiceClase].TotalEncontrado + DatosColumna[i].CantidadCategorias);
+
+                        //MessageBox.Show(i + "| " + Arriba + "\n" + Abajo);
+                        AuxiliarBayes[i] = Arriba / Abajo;
+
+
+                    }
+                    //MessageBox.Show("Bayes Aux: " + AuxiliarBayes[i] + "");
+
+                }
+
+
+
+
+
+                double Resultado = 1;
+                //Resultado del calculo
+                for (int i = 0; i <= AuxiliarBayes.GetUpperBound(0); i++)
+                {
+                    Resultado = Resultado * AuxiliarBayes[i];
+                }
+                //MessageBox.Show("Resul " + Resultado);
+                return Resultado;
+            }
+            //almacena el resultado de cada bayes 
+            double[] Clase = new double[ColumnaLocal[ColumnaClase].CantidadCategorias];
+
+            double[] MayorDeArreglo(double[] Arreglo)
+            {
+                //Guarda el indice al que pertenece en el 1 y en el 0, su valor
+                double[] Mayor = new double[2];
+
+                Mayor[0] = Arreglo[0];
+                Mayor[1] = 0;
+                for (int i = 0; i <= Arreglo.GetUpperBound(0); i++)
+                {
+                    if (Arreglo[i] > Mayor[0])
+                    {
+                        Mayor[0] = Arreglo[i];
+                        Mayor[1] = i;
+                    }
+                }
+                return Mayor;
+            }
+            //Se calcula el valor para cada clase
+            //Se asigna el resultado a cada elemento de la lista 
+            for (int i = 0; i < input.Count; i++)
+            {
+
+
+                for (int j = 0; j <= Clase.GetUpperBound(0); j++)
+                {
+                    //Se guarda el resultado de cada bayes
+                    Clase[j] = bayesSuave(input[i], j);
+
+                    // MessageBox.Show("Clase: " + Clase[j] + "\n Indice: " + j + " " + DatosColumna[ColumnaClase].Categoria[j].Nombre);
+                }
+
+                // input[i][j] =
+                //Se determina a cual clase pertenece
+
+                double[] Resul = MayorDeArreglo(Clase);
+                int indice = ((int)Resul[1]);
+
+                input[i][ColumnaClase] = ColumnaLocal[ColumnaClase].Categoria[indice].Nombre;
+                Console.WriteLine();
+                //MessageBox.Show("Fue :" + DatosColumna[ColumnaClase].Categoria[indice].Nombre);
+            }
+
+
+            //Transformar 
+            string[,] Output = new string[input.Count, input[0].Length];
+            for (int i = 0; i < input.Count; i++)
+            {
+                for (int j = 0; j < input[0].Length; j++)
+                {
+                    Output[i, j] = input[i][j];
+                }
+            }
+
+            return Output;
+        }
+        public string[,] DevolverTablaReducida(string[,] Tabla, int Tamano)
+        {
+
+            //Se Convierte el los la cadena del porcentage de entrenamiento a unn decimal correspondiente
+
+
+            string[,] TablaReducida = new string[Tamano, Tabla.GetLength(1)];
+            for (int i = 0; i < TablaReducida.GetLength(0); i++)
+            {
+                for (int j = 0; j < Tabla.GetLength(1); j++)
+                {
+                    TablaReducida[i, j] = Tabla[i, j];
+                }
+            }
+            return TablaReducida;
         }
     }
 }

@@ -174,22 +174,8 @@ namespace Clasificador_Bayes_Ingenuo
             }
 
         }
-        string[,] DevolverTablaReducida(string[,]Tabla,int Tamano)
-        {
 
-            //Se Convierte el los la cadena del porcentage de entrenamiento a unn decimal correspondiente
-
-
-            string[,] TablaReducida = new string[Tamano, Tabla.GetLength(1)];
-            for (int i = 0; i < TablaReducida.GetLength(0); i++)
-            {
-                for (int j = 0; j < Tabla.GetLength(1); j++)
-                {
-                    TablaReducida[i, j] = Tabla[i, j];
-                }
-            }
-            return TablaReducida;
-        }
+      
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -206,11 +192,12 @@ namespace Clasificador_Bayes_Ingenuo
                 if(txt_Entrenamiento.Text != "")
                 {
                     // Datos.FuncionDensidad(Datos.TablaValores, int.Parse(numUpDown.Text));
-                   // MessageBox.Show("entro en validacion");
-                    string[,] ArregloValidacion = Datos.Validar(Datos.TablaDiscretizada, Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
-
+                    // MessageBox.Show("entro en validacion");
+                   //string[,] ArregloValidacion = Datos.Validar(Datos.TablaDiscretizada, Datos.ClaseIndex, Datos.DatosColumna[Datos.ClaseIndex].Categoria, int.Parse(txt_intervalo.Text), txt_Entrenamiento.Text);
+                    string[,] ArregloValidacion = Datos.Entrenar(Datos.TablaDiscretizada,Datos.ClaseIndex,double.Parse(txt_Entrenamiento.Text));
                     MostrarResultado(Datos.TablaTitulos, ArregloValidacion);
-                    string[,] TablaReducida = DevolverTablaReducida(Datos.TablaValores, ArregloValidacion.GetLength(0));
+                    string[,] TablaReducida = Datos.DevolverTablaReducida(Datos.TablaValores, ArregloValidacion.GetLength(0));
+
                     double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, TablaReducida, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
                     
                     
@@ -252,8 +239,8 @@ namespace Clasificador_Bayes_Ingenuo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //string[,] DatosPrueba = Datos.DatosPrueba(@"C:\Users\alex_\Desktop\Radeon ReLive\Documentacion\datasets\prueba.txt");
-            //Console.WriteLine();
+            //string[] TablaOriginial{ { } }
+            //double[,] TablaConfusion = Datos.CrearMatrizDeConfusion(ArregloValidacion, TablaReducida, Datos.DatosColumna[Datos.ClaseIndex].Categoria, Datos.ClaseIndex);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
