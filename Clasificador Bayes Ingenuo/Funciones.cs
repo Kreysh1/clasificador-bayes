@@ -167,6 +167,7 @@ namespace Clasificador_Bayes_Ingenuo
 
                 return indice;
           }
+            //Validacion
 
             double[,] matrizConfusion = new double[ListaClases.Count, ListaClases.Count];
 
@@ -175,7 +176,7 @@ namespace Clasificador_Bayes_Ingenuo
                 //MessageBox.Show("Se comparo: "+i+"| " + TablaReal[i, colClase] + " / " + TablaDiscreta[i, colClase]);
                 string aux1 = TablaReal[i, colClase];
                 string aux2 = TablaDiscreta[i, colClase];
-                int[] aux = IndicePertenece(Clases, TablaReal[i,colClase], TablaDiscreta[i, colClase]);
+                int[] aux = IndicePertenece(Clases, aux1, aux2);
                     //Seregresa 
                    
 

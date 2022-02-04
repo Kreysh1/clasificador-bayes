@@ -35,6 +35,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.Validacion = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.txt_Entrenamiento = new System.Windows.Forms.TextBox();
@@ -65,7 +66,6 @@ namespace Clasificador_Bayes_Ingenuo
             this.label4 = new System.Windows.Forms.Label();
             this.lbl_Hileras = new System.Windows.Forms.Label();
             this.lbl_col = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txt_clase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDataset)).BeginInit();
@@ -138,6 +138,16 @@ namespace Clasificador_Bayes_Ingenuo
             this.groupBox1.Size = new System.Drawing.Size(467, 133);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(62, 41);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(183, 18);
+            this.label13.TabIndex = 30;
+            this.label13.Text = "Porcentaje de Entrenamiento:";
             // 
             // Validacion
             // 
@@ -265,7 +275,7 @@ namespace Clasificador_Bayes_Ingenuo
             this.TablaConfusion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TablaConfusion.Location = new System.Drawing.Point(16, 617);
             this.TablaConfusion.Name = "TablaConfusion";
-            this.TablaConfusion.Size = new System.Drawing.Size(567, 141);
+            this.TablaConfusion.Size = new System.Drawing.Size(563, 141);
             this.TablaConfusion.TabIndex = 16;
             // 
             // label7
@@ -302,7 +312,7 @@ namespace Clasificador_Bayes_Ingenuo
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(590, 593);
+            this.label9.Location = new System.Drawing.Point(590, 594);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(161, 21);
             this.label9.TabIndex = 20;
@@ -317,9 +327,9 @@ namespace Clasificador_Bayes_Ingenuo
             this.Precision,
             this.Recall,
             this.F1});
-            this.dvgEvaluacion.Location = new System.Drawing.Point(594, 617);
+            this.dvgEvaluacion.Location = new System.Drawing.Point(589, 617);
             this.dvgEvaluacion.Name = "dvgEvaluacion";
-            this.dvgEvaluacion.Size = new System.Drawing.Size(613, 141);
+            this.dvgEvaluacion.Size = new System.Drawing.Size(618, 141);
             this.dvgEvaluacion.TabIndex = 21;
             // 
             // Categorias
@@ -420,16 +430,6 @@ namespace Clasificador_Bayes_Ingenuo
             this.lbl_col.Size = new System.Drawing.Size(63, 22);
             this.lbl_col.TabIndex = 29;
             this.lbl_col.Text = "Hileras";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Palatino Linotype", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(62, 41);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(183, 18);
-            this.label13.TabIndex = 30;
-            this.label13.Text = "Porcentaje de Entrenamiento:";
             // 
             // Form1
             // 
